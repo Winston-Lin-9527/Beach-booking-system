@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 
-mainWindow::mainWindow()
+MainWindow::MainWindow()
 {
-
+    this->_centralWidget = new CentralWidget;
+    setCentralWidget(_centralWidget);
+    setWindowTitle("Bitch sport Booking");
 }

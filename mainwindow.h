@@ -1,12 +1,21 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+/*
+ *  really just a wrapper for the main widget
+ */
 
-class mainWindow
+#include <QMainWindow>
+#include "centralwidget.h"
+
+class MainWindow : public QMainWindow
 {
+    Q_OBJECT
 public:
-    mainWindow();
+    MainWindow();
+
+private:
+    CentralWidget *_centralWidget;
 };
 
 #endif // MAINWINDOW_H
