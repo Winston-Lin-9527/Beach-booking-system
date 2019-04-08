@@ -9,10 +9,14 @@ UserModel::UserModel(User user, QObject *parent):QAbstractItemModel(parent)
 }
 
 int UserModel::rowCount(const QModelIndex &index) const{
+    Q_UNUSED(index)
+
     return this->_users.size();
 }
 
 int UserModel::columnCount(const QModelIndex &index) const{
+    Q_UNUSED(index)
+
     return 8;   // the number of fields in one user object
 }
 
@@ -51,11 +55,15 @@ QVariant UserModel::data(const QModelIndex &index, int role) const{
 /*  work on this function later
  */
 QVariant UserModel::headerData(int section, Qt::Orientation orientation, int role) const{
+    // use section later
+
     return QVariant();
 }
 
 bool UserModel::insertRows(int position, int rows, const QModelIndex &index){
     beginInsertRows(QModelIndex(), position, position + rows - 1);
+
+    Q_UNUSED(index)
 
     for(int row = 0; row < rows; ++row)
         _users.insert(position, {  int(),

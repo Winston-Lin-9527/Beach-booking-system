@@ -19,7 +19,8 @@ SOURCES += \
         main.cpp \
     usermodel.cpp \
     mainwindow.cpp \
-    centralwidget.cpp
+    centralwidget.cpp \
+    createaccountwizard.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -29,4 +30,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     usermodel.h \
     mainwindow.h \
-    centralwidget.h
+    centralwidget.h \
+    createaccountwizard.h

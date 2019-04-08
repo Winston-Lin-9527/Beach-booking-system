@@ -3,9 +3,11 @@
 
 #include <QWidget>
 
+class CreateAccountWizard;
 class QLabel;
 class QStackedWidget;
 class QPushButton;
+class QVBoxLayout;
 
 class CentralWidget : public QWidget
 {
@@ -16,12 +18,16 @@ public:
     virtual ~CentralWidget();
 
 public slots:
-    void lmao();
+    void createAccountButtonClicked();
+    void bookingButtonClicked();
 
 private:
     QStackedWidget *_stackedWindows;
     QPushButton *_bookingButton;
     QPushButton *_createAccountButton;
+    CreateAccountWizard *_createAccountWizard;
+    QVBoxLayout *_createAccountWizardLayout;
+
     QLabel *_label;
     QLabel *_label2;
 };
