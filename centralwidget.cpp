@@ -19,14 +19,11 @@ CentralWidget::CentralWidget(QWidget *parent)
     _bookingButton = new QPushButton("Make New Bookings");
 
     _createAccountWizard = new CreateAccountWizard;
-    _createAccountWizardLayout = new QVBoxLayout;
 
-
-    QGroupBox *groupBox = new QGroupBox;
-    groupBox->setLayout(_createAccountWizardLayout);
-
-    _stackedWindows->addWidget(_label);
-    _stackedWindows->addWidget(groupBox);
+    /*
+     *  add pages to the stacked window widget
+     */
+    _stackedWindows->addWidget(_label);         // first page
 
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
     mainLayout->setMargin(5);
@@ -36,19 +33,12 @@ CentralWidget::CentralWidget(QWidget *parent)
 
     setLayout(mainLayout);
 
-    connect(_createAccountButton, SIGNAL(clicked()), this, SLOT(createAccountButtonClicked()));
+    connect(_createAccountButton, SIGNAL(clicked()), _createAccountWizard, SLOT(exec()));
     connect(_bookingButton, SIGNAL(clicked()), this, SLOT(bookingButtonClicked()));
 }
 
 CentralWidget::~CentralWidget(){}
 
-void CentralWidget::createAccountButtonClicked(){
+void CentralWidget::bookingButtonClicked(){
     _stackedWindows->setCurrentIndex(1);
 }
-
-void CentralWidget::bookingButtonClicked(){
-    _stackedWindows->setCurrentIndex(0);
-}
-
-
-

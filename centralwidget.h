@@ -18,7 +18,6 @@ public:
     virtual ~CentralWidget();
 
 public slots:
-    void createAccountButtonClicked();
     void bookingButtonClicked();
 
 private:
@@ -26,7 +25,6 @@ private:
     QPushButton *_bookingButton;
     QPushButton *_createAccountButton;
     CreateAccountWizard *_createAccountWizard;
-    QVBoxLayout *_createAccountWizardLayout;
 
     QLabel *_label;
     QLabel *_label2;

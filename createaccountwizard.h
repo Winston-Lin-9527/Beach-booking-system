@@ -5,13 +5,16 @@
 
 class QLabel;
 class QVBoxLayout;
+class QLineEdit;
+class QDateEdit;
+class QRadioButton;
 
 class CreateAccountWizard : public QWizard
 {
     Q_OBJECT
 
 public:
-    enum { Page_Intro, Page_Personal, Page_AccSetting, Page_Finish };
+    enum PageID{ Page_Intro, Page_Personal, Page_AccSetting, Page_Finish };
 
     CreateAccountWizard();
 
@@ -31,4 +34,26 @@ public:
 private:
     QLabel *_bigLabel;
     QVBoxLayout *_mainLayout;
+};
+
+class PersonalPage : public QWizardPage
+{
+    Q_OBJECT
+
+public:
+    PersonalPage();
+
+private:
+    QLineEdit *_firstNameLineEdit;
+    QLineEdit *_lastNameLineEdit;
+    QLineEdit *_addressLineEdit;
+    QLineEdit *_emailLineEdit;
+
+    QDateEdit *_DOBLineEdit;
+
+    QRadioButton *_maleRadioButton;
+    QRadioButton *_femaleRadioButton;
+    QRadioButton *_unisexRadioButton;
+
+    // more staffs
 };
