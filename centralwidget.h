@@ -2,6 +2,7 @@
 #define CENTRALWIDGET_H
 
 #include <QWidget>
+#include <usermodel.h>
 
 class CreateAccountWizard;
 class QLabel;
@@ -21,13 +22,16 @@ public slots:
     void bookingButtonClicked();
 
 private:
+    QLabel *_label;
+    QLabel *_label2;
+
     QStackedWidget *_stackedWindows;
     QPushButton *_bookingButton;
     QPushButton *_createAccountButton;
+
     CreateAccountWizard *_createAccountWizard;
 
-    QLabel *_label;
-    QLabel *_label2;
+    UserModel *_userModel;
 };
 
 #endif // CENTRALWIDGET_H

@@ -7,7 +7,7 @@ class QLabel;
 class QVBoxLayout;
 class QLineEdit;
 class QDateEdit;
-class QRadioButton;
+class QComboBox;
 
 class CreateAccountWizard : public QWizard
 {
@@ -24,6 +24,10 @@ private slots:
 
 #endif // CREATEACCOUNTWIZARD_H
 
+
+/*
+ * the introduction page
+ */
 class IntroPage : public QWizardPage
 {
     Q_OBJECT
@@ -36,6 +40,9 @@ private:
     QVBoxLayout *_mainLayout;
 };
 
+/*
+ * the page that allows the user to enter his personal details
+ */
 class PersonalPage : public QWizardPage
 {
     Q_OBJECT
@@ -49,11 +56,30 @@ private:
     QLineEdit *_addressLineEdit;
     QLineEdit *_emailLineEdit;
 
-    QDateEdit *_DOBLineEdit;
+    QDateEdit *_DOBDateEdit;
 
-    QRadioButton *_maleRadioButton;
-    QRadioButton *_femaleRadioButton;
-    QRadioButton *_unisexRadioButton;
+    QComboBox *_sexComboBox;
 
-    // more staffs
+    QLabel *_DOBLabel;
+    QLabel *_sexLabel;
+};
+
+/*
+ * the page to set the account password and resort number
+ */
+class AccSettingPage : public QWizardPage
+{
+    Q_OBJECT
+
+public:
+    AccSettingPage();
+
+private:
+    QLineEdit *_passwordLineEdit;
+    QLineEdit *_resortNumberLinEdit;
+    QLineEdit *_visaCardNumber_LineEdit;
+    QLineEdit *_visaExpiryDate_LineEdit;
+    QLineEdit *_visaCVV_LineEdit;
+
+
 };

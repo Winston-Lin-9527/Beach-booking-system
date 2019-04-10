@@ -4,6 +4,9 @@
 #include <QVBoxLayout>
 #include <QMessageBox>
 #include <QLineEdit>
+#include <QGroupBox>
+#include <QDateEdit>
+#include <QComboBox>
 
 CreateAccountWizard::CreateAccountWizard()
 {
@@ -76,15 +79,58 @@ PersonalPage::PersonalPage():QWizardPage(0){
     _firstNameLineEdit->setPlaceholderText("First name");
 
     _lastNameLineEdit = new QLineEdit;
-    _lastNameLineEdit->setPlaceholderText("Last name");
+    _lastNameLineEdit->setPlaceholderText(tr("Last name"));
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    _addressLineEdit = new QLineEdit;
+    _addressLineEdit->setPlaceholderText(tr("Address"));
+
+    _emailLineEdit = new QLineEdit;
+    _emailLineEdit->setPlaceholderText("Email address");
+
+    _DOBDateEdit = new QDateEdit;
+
+    _sexComboBox = new QComboBox();
+    _sexComboBox->addItems(QStringList() << "Male" << "Female" << "Unisex");
+
+    _DOBLabel = new QLabel("Date of birth:");
+    _sexLabel = new QLabel("Your sex");
+
+    this->registerField("personal.firstname*", _firstNameLineEdit);
+    this->registerField("personal.lastname*", _lastNameLineEdit);
+    this->registerField("personal.address*", _addressLineEdit);
+    this->registerField("personal.email*", _emailLineEdit);
+    this->registerField("personal.DOB", _DOBDateEdit);
+    this->registerField("personal.sex", _sexComboBox);
+
+    QGridLayout *mainLayout = new QGridLayout;
 
     QHBoxLayout *nameSectionHorizontalLayout = new QHBoxLayout;
     nameSectionHorizontalLayout->addWidget(_firstNameLineEdit);
     nameSectionHorizontalLayout->addWidget(_lastNameLineEdit);
 
-    mainLayout->addLayout(nameSectionHorizontalLayout);
+    QHBoxLayout *addressHorizontalLayout = new QHBoxLayout;
+    addressHorizontalLayout->addWidget(_addressLineEdit);
+
+    QHBoxLayout *emailHorizontalLayout = new QHBoxLayout;
+    emailHorizontalLayout->addWidget(_emailLineEdit);
+
+    QHBoxLayout *DOBHorizontalLayout = new QHBoxLayout;
+    DOBHorizontalLayout->addWidget(_DOBLabel);
+    DOBHorizontalLayout->addWidget(_DOBDateEdit);
+
+    QHBoxLayout *sexHorizontalLayout = new QHBoxLayout;
+    sexHorizontalLayout->addWidget(_sexLabel);
+    sexHorizontalLayout->addWidget(_sexComboBox);
+
+    mainLayout->addLayout(nameSectionHorizontalLayout, 0, 0, Qt::AlignTop);
+    mainLayout->addLayout(addressHorizontalLayout, 1, 0, Qt::AlignTop);
+    mainLayout->addLayout(emailHorizontalLayout, 2, 0, Qt::AlignTop);
+    mainLayout->addLayout(DOBHorizontalLayout, 3, 0, Qt::AlignTop);
+    mainLayout->addLayout(sexHorizontalLayout, 4, 0, Qt::AlignTop);
 
     this->setLayout(mainLayout);
+}
+
+AccSettingPage::AccSettingPage():QWizardPage(0){
+
 }
