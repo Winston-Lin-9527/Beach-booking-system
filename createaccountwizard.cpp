@@ -1,4 +1,3 @@
-#include "createaccountwizard.h"
 #include <QPixmap>
 #include <QLabel>
 #include <QVBoxLayout>
@@ -7,6 +6,9 @@
 #include <QGroupBox>
 #include <QDateEdit>
 #include <QComboBox>
+#include <QScrollArea>
+
+#include "createaccountwizard.h"
 
 CreateAccountWizard::CreateAccountWizard()
 {
@@ -14,9 +16,9 @@ CreateAccountWizard::CreateAccountWizard()
 
     this->setPage(Page_Intro, new IntroPage);
     this->setPage(Page_Personal, new PersonalPage);
-    /*  populate with other pages
-     *
-     */
+    this->setPage(Page_AccSetting, new AccSettingPage);
+    this->setPage(Page_Payment, new PaymentSettingPage);
+    this->setPage(Page_Summary, new SummaryPage);
 
     this->setStartId(Page_Intro);
 
@@ -45,7 +47,7 @@ void CreateAccountWizard::displayHelp(){
         message = tr("Enter the password for your new account");
         break;
     }
-    case Page_Finish:{
+    case Page_Summary:{
         message = tr("Click finish to go back to main screen.");
         break;
     }
@@ -59,19 +61,19 @@ void CreateAccountWizard::displayHelp(){
     lastMessage = message;
 }
 
-IntroPage::IntroPage():QWizardPage(0){
+IntroPage::IntroPage():QWizardPage(nullptr){
     this->setTitle("Create Account");
     this->setPixmap(QWizard::WatermarkPixmap, QPixmap("watermark.png"));
 
     _bigLabel = new QLabel("This wizard will guide you create your account for the booking system.");
-    _bigLabel->setWordWrap(true);
+    _bigLabel->setWordWrap(true);   // this makes the text wraps to next line when view boundary is reached, basically auto 'return'
 
     _mainLayout = new QVBoxLayout;
     _mainLayout->addWidget(_bigLabel);
     this->setLayout(_mainLayout);
 }
 
-PersonalPage::PersonalPage():QWizardPage(0){
+PersonalPage::PersonalPage():QWizardPage(nullptr){
     this->setTitle("Personal detail");
     // pixmap
 
@@ -90,7 +92,7 @@ PersonalPage::PersonalPage():QWizardPage(0){
     _DOBDateEdit = new QDateEdit;
 
     _sexComboBox = new QComboBox();
-    _sexComboBox->addItems(QStringList() << "Male" << "Female" << "Unisex");
+    _sexComboBox->addItems(QStringList() << "Male" << "Female");
 
     _DOBLabel = new QLabel("Date of birth:");
     _sexLabel = new QLabel("Your sex");
@@ -131,6 +133,134 @@ PersonalPage::PersonalPage():QWizardPage(0){
     this->setLayout(mainLayout);
 }
 
-AccSettingPage::AccSettingPage():QWizardPage(0){
+AccSettingPage::AccSettingPage():QWizardPage(nullptr){
+    this->setTitle("Account setting");
+    // pixmap
 
+    _usernameLineEdit = new QLineEdit;
+    _usernameLineEdit->setMaxLength(10);
+    _usernameLineEdit->setMaximumWidth(150);
+
+    _passwordLineEdit = new QLineEdit;
+    _passwordLineEdit->setEchoMode(QLineEdit::PasswordEchoOnEdit);
+    _passwordLineEdit->setMaxLength(8);
+    _passwordLineEdit->setMaximumWidth(150);
+
+    _passwordConfirmLineEdit = new QLineEdit;
+    _passwordConfirmLineEdit->setEchoMode(QLineEdit::Password);
+    _passwordConfirmLineEdit->setMaxLength(8);
+    _passwordConfirmLineEdit->setMaximumWidth(150);
+
+    _resortNumberLineEdit = new QLineEdit;
+    _resortNumberLineEdit->setMaxLength(4);     // resort room number are all 4 digits
+    _resortNumberLineEdit->setMaximumWidth(40);
+
+    _usernameLabel = new QLabel("Username:");
+    _passwordLabel = new QLabel("Your password:");
+    _passwordConfirmLabel = new QLabel("Re-enter your password:");
+    _resortNumberLabel = new QLabel("Your resort room number:");
+
+    this->registerField("Acc.username", _usernameLineEdit);
+    this->registerField("Acc.password", _passwordLineEdit);
+    this->registerField("Acc.resortnumber", _resortNumberLineEdit);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+
+    QHBoxLayout *usernameHorizontalLayout = new QHBoxLayout;
+    usernameHorizontalLayout->addWidget(_usernameLabel);
+    usernameHorizontalLayout->addWidget(_usernameLineEdit);
+
+    QHBoxLayout *passwordHorizontalLayout = new QHBoxLayout;
+    passwordHorizontalLayout->addWidget(_passwordLabel);
+    passwordHorizontalLayout->addWidget(_passwordLineEdit);
+
+    QHBoxLayout *passwordConfirmHorizontalLayout = new QHBoxLayout;
+    passwordConfirmHorizontalLayout->addWidget(_passwordConfirmLabel);
+    passwordConfirmHorizontalLayout->addWidget(_passwordConfirmLineEdit);
+
+    QHBoxLayout *resortNumberHorizontalLayout = new QHBoxLayout;
+    resortNumberHorizontalLayout->addWidget(_resortNumberLabel);
+    resortNumberHorizontalLayout->addWidget(_resortNumberLineEdit);
+
+    mainLayout->addLayout(usernameHorizontalLayout);
+    mainLayout->addLayout(passwordHorizontalLayout);
+    mainLayout->addLayout(passwordConfirmHorizontalLayout);
+    mainLayout->addLayout(resortNumberHorizontalLayout);
+
+    this->setLayout(mainLayout);
+
+    connect(_passwordConfirmLineEdit, &QLineEdit::editingFinished, this, &AccSettingPage::checkPasswordValidity);
+}
+
+/*
+ * this function responds to password and confirm password views
+ */
+void AccSettingPage::checkPasswordValidity(){
+    if(_passwordLineEdit->text() != _passwordConfirmLineEdit->text()){
+        QMessageBox::about(this, "Warning", "Passwords don't match!");
+        _passwordConfirmLineEdit->clear();
+        _passwordLineEdit->clear();
+
+        _passwordLineEdit->setFocus();      // place the cursor back to password line edit
+    }
+}
+
+PaymentSettingPage::PaymentSettingPage():QWizardPage(nullptr){
+    this->setTitle("Payment setting");
+
+    _visaCardNumber_LineEdit = new QLineEdit;
+    _visaCardNumber_LineEdit->setMaxLength(16);     // standard VISA card number length
+
+    _visaExpiryDate_DateEdit = new QDateEdit;
+
+    _visaCVV_LineEdit = new QLineEdit;
+    _visaCVV_LineEdit->setMaximumWidth(30);
+    _visaCVV_LineEdit->setMaxLength(3);             // CVV has 3 digits only
+
+    _visaIcon = new QIcon("visaIcon.png");
+
+    _visaCardNumberLabel = new QLabel("Visa card Number: ");
+    _visaExpiryDateLabel = new QLabel("Visa expiry date: ");
+    _visaCVVLabel = new QLabel("CVV: ");
+
+    this->registerField("Visa.number", _visaCardNumber_LineEdit);
+    this->registerField("Visa.expiryDate", _visaExpiryDate_DateEdit);
+    this->registerField("Visa.CVV", _visaCVV_LineEdit);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+
+    QHBoxLayout *visaCardNumberHorizontalLayout = new QHBoxLayout;
+    visaCardNumberHorizontalLayout->addWidget(_visaCardNumberLabel);
+    visaCardNumberHorizontalLayout->addWidget(_visaCardNumber_LineEdit);
+
+    QHBoxLayout *visaExpiryDateHorizontalLayout = new QHBoxLayout;
+    visaExpiryDateHorizontalLayout->addWidget(_visaExpiryDateLabel);
+    visaExpiryDateHorizontalLayout->addWidget(_visaExpiryDate_DateEdit);
+
+    QHBoxLayout *visaCVVHorizontalLayout = new QHBoxLayout;
+    visaCVVHorizontalLayout->addWidget(_visaCVVLabel);
+    visaCVVHorizontalLayout->addWidget(_visaCVV_LineEdit);
+
+    mainLayout->addLayout(visaCardNumberHorizontalLayout);
+    mainLayout->addLayout(visaExpiryDateHorizontalLayout);
+    mainLayout->addLayout(visaCVVHorizontalLayout);
+
+    this->setLayout(mainLayout);
+}
+
+SummaryPage::SummaryPage():QWizardPage(nullptr){
+    this->setTitle("Summary");
+
+
+}
+
+/*
+ * override this function to take advantage of the built-in mechanism instead of connecting extra signals or slots
+ */
+bool SummaryPage::validatePage(){
+
+    QMessageBox::information(this, "Success", "The account has been sucessfully created!");
+
+    //  if returned false then the QWizard will not close after clicking the finish button, so always return true:)
+    return true;
 }

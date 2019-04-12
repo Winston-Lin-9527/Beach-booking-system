@@ -52,6 +52,14 @@ QVariant UserModel::data(const QModelIndex &index, int role) const{
     return QVariant();
 }
 
+QModelIndex UserModel::index(int row, int column, const QModelIndex &parent) const{
+    return createIndex(row, column);
+}
+
+QModelIndex UserModel::parent(const QModelIndex &index) const{
+    return QModelIndex();
+}
+
 /*  work on this function later
  */
 QVariant UserModel::headerData(int section, Qt::Orientation orientation, int role) const{

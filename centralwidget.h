@@ -2,7 +2,7 @@
 #define CENTRALWIDGET_H
 
 #include <QWidget>
-#include <usermodel.h>
+#include "usermodel.h"
 
 class CreateAccountWizard;
 class QLabel;
@@ -20,6 +20,9 @@ public:
 
 public slots:
     void bookingButtonClicked();
+//    void addAccount(User &newUser);
+//    void editAccount();
+//    void removeAccount();
 
 private:
     QLabel *_label;

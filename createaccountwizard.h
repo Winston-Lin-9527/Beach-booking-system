@@ -8,13 +8,14 @@ class QVBoxLayout;
 class QLineEdit;
 class QDateEdit;
 class QComboBox;
+class QScrollArea;
 
 class CreateAccountWizard : public QWizard
 {
     Q_OBJECT
 
 public:
-    enum PageID{ Page_Intro, Page_Personal, Page_AccSetting, Page_Finish };
+    enum PageID{ Page_Intro, Page_Personal, Page_AccSetting, Page_Payment, Page_Summary };
 
     CreateAccountWizard();
 
@@ -74,12 +75,46 @@ class AccSettingPage : public QWizardPage
 public:
     AccSettingPage();
 
+public slots:
+    void checkPasswordValidity();
+
 private:
+    QLineEdit *_usernameLineEdit;
     QLineEdit *_passwordLineEdit;
-    QLineEdit *_resortNumberLinEdit;
+    QLineEdit *_passwordConfirmLineEdit;
+    QLineEdit *_resortNumberLineEdit;
+
+    QLabel *_usernameLabel;
+    QLabel *_passwordLabel;
+    QLabel *_passwordConfirmLabel;
+    QLabel *_resortNumberLabel;
+};
+
+class PaymentSettingPage : public QWizardPage
+{
+public:
+    PaymentSettingPage();
+
+private:
     QLineEdit *_visaCardNumber_LineEdit;
-    QLineEdit *_visaExpiryDate_LineEdit;
+    QDateEdit *_visaExpiryDate_DateEdit;
     QLineEdit *_visaCVV_LineEdit;
 
+    QIcon *_visaIcon;
 
+    QLabel *_visaCardNumberLabel;
+    QLabel *_visaExpiryDateLabel;
+    QLabel *_visaCVVLabel;
+};
+
+/*
+ * gives a summary of all the staffs entered in previous pages for final confirm
+ */
+class SummaryPage : public QWizardPage
+{
+    Q_OBJECT
+
+public:
+    SummaryPage();
+    virtual bool validatePage() override;   // take advantage of the built-in mechanism
 };

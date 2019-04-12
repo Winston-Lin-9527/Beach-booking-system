@@ -7,10 +7,13 @@
 
 #include "centralwidget.h"
 #include "createaccountwizard.h"
+#include "usermodel.h"
 
 CentralWidget::CentralWidget(QWidget *parent)
 {
-    this->_stackedWindows = new QStackedWidget;
+    _stackedWindows = new QStackedWidget;
+
+    _userModel = new UserModel(this);
 
     _label = new QLabel("this is the bitch sport");
     _label2 = new QLabel("create account?");
