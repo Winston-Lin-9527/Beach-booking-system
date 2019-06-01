@@ -9,6 +9,7 @@ class QLineEdit;
 class QDateEdit;
 class QComboBox;
 class QScrollArea;
+class QCheckBox;
 
 class CreateAccountWizard : public QWizard
 {
@@ -117,4 +118,8 @@ class SummaryPage : public QWizardPage
 public:
     SummaryPage();
     virtual bool validatePage() override;   // take advantage of the built-in mechanism
+
+private:
+    QCheckBox *_checkBox;
+    QLabel *_confirmationText;
 };

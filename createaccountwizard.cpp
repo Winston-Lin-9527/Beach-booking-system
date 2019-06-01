@@ -7,6 +7,7 @@
 #include <QDateEdit>
 #include <QComboBox>
 #include <QScrollArea>
+#include <QCheckBox>
 
 #include "createaccountwizard.h"
 
@@ -251,16 +252,29 @@ PaymentSettingPage::PaymentSettingPage():QWizardPage(nullptr){
 SummaryPage::SummaryPage():QWizardPage(nullptr){
     this->setTitle("Summary");
 
+    this->_checkBox = new QCheckBox;
+    this->registerField("Summary.check", _checkBox);
 
+    this->_confirmationText = new QLabel("I have reviewed my details and confirm they are correct.");
+
+    QHBoxLayout *layout = new QHBoxLayout;
+    layout->addWidget(_confirmationText);
+    layout->addWidget(_checkBox);
+
+    this->setLayout(layout);
 }
 
 /*
  * override this function to take advantage of the built-in mechanism instead of connecting extra signals or slots
  */
 bool SummaryPage::validatePage(){
-
-    QMessageBox::information(this, "Success", "The account has been sucessfully created!");
-
-    //  if returned false then the QWizard will not close after clicking the finish button, so always return true:)
-    return true;
+    if(this->field("Summary.check") == true){
+        QMessageBox::information(this, "Success", "The account has been sucessfully created!");
+        return true;    // allow exit when the checkbox is checked
+    }
+    else {
+        QMessageBox::warning(this, "Error", "You need to confirm by checking the box");
+        return false;
+    }
 }
+

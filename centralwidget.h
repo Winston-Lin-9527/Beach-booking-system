@@ -25,12 +25,14 @@ public slots:
 //    void removeAccount();
 
 private:
-    QLabel *_label;
-    QLabel *_label2;
-
-    QStackedWidget *_stackedWindows;
+    QLabel *_welcomeLabel;
     QPushButton *_bookingButton;
     QPushButton *_createAccountButton;
+
+    QStackedWidget *_stackedWindows;
+    QWidget *_mainPage;
+
+    QLayout *_mainLayout;
 
     CreateAccountWizard *_createAccountWizard;
 

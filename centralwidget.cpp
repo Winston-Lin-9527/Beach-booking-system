@@ -12,29 +12,36 @@
 CentralWidget::CentralWidget(QWidget *parent)
 {
     _stackedWindows = new QStackedWidget;
-
+    _createAccountWizard = new CreateAccountWizard;
     _userModel = new UserModel(this);
 
-    _label = new QLabel("this is the bitch sport");
-    _label2 = new QLabel("create account?");
+    _welcomeLabel = new QLabel("this is the beach sport renting system");
 
     _createAccountButton = new QPushButton("create account");
     _bookingButton = new QPushButton("Make New Bookings");
 
-    _createAccountWizard = new CreateAccountWizard;
+    _mainPage = new QWidget(this);
+
+    _mainLayout = new QHBoxLayout;
 
     /*
      *  add pages to the stacked window widget
      */
-    _stackedWindows->addWidget(_label);         // first page
+    QLabel *label2 = new QLabel("ddd");
 
-    QHBoxLayout *mainLayout = new QHBoxLayout(this);
-    mainLayout->setMargin(5);
-    mainLayout->addWidget(_stackedWindows);
-    mainLayout->addWidget(_createAccountButton);
-    mainLayout->addWidget(_bookingButton);
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->setMargin(5);
+    layout->addWidget(_welcomeLabel);
+    layout->addWidget(_createAccountButton);
+    layout->addWidget(_bookingButton);
+    _mainPage->setLayout(layout);
 
-    setLayout(mainLayout);
+    _stackedWindows->addWidget(_mainPage);
+    _stackedWindows->addWidget(label2);
+
+    _mainLayout->addWidget(_stackedWindows);
+
+    setLayout(_mainLayout);
 
     connect(_createAccountButton, SIGNAL(clicked()), _createAccountWizard, SLOT(exec()));
     connect(_bookingButton, SIGNAL(clicked()), this, SLOT(bookingButtonClicked()));
