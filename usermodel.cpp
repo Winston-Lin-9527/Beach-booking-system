@@ -1,5 +1,7 @@
 #include "usermodel.h"
 
+#include <QDate>
+
 UserModel::UserModel(QObject *parent):QAbstractItemModel(parent)
 {}
 
@@ -38,15 +40,25 @@ QVariant UserModel::data(const QModelIndex &index, int role) const{
             case 2:
                 return user._passwordHash;
             case 3:
-                return user._address;
+                return user._firstName;
             case 4:
-                return user._email;
+                return user._lastName;
             case 5:
-                return user._age;
+                return user._address;
             case 6:
-                return user._resortNumber;
+                return user._email;
             case 7:
-             return user._isMale;
+                return user._resortNumber;
+            case 8:
+                return user._isMale;
+            case 9:
+                return user._DOB;
+            case 10:
+                return user._visaNumber;
+            case 11:
+                return user._visaExpiryDate;
+            case 12:
+                return user._CVV;
         }
     }
     return QVariant();
@@ -74,15 +86,19 @@ bool UserModel::insertRows(int position, int rows, const QModelIndex &index){
     Q_UNUSED(index)
 
     for(int row = 0; row < rows; ++row)
-        _users.insert(position, {  int(),
+        _users.insert(position, {  QString(),
                                    QString(),
                                    QByteArray(),
                                    QString(),
                                    QString(),
-                                   short(),
+                                   QString(),
+                                   QString(),
                                    int(),
-                                   bool()});
-
+                                   bool(),
+                                   QDate(),
+                                   QString(),
+                                   QDate(),
+                                   QString()});
     endInsertRows();
     return true;
 }
@@ -107,7 +123,7 @@ bool UserModel::setData(const QModelIndex &index, const QVariant &value, int rol
             case 2: user._passwordHash = value.toByteArray(); break;
             case 3: user._address = value.toString(); break;
             case 4: user._email = value.toString(); break;
-            case 5: user._age = value.toInt();
+            // populate more fields here later
             default: return false;
         }
 

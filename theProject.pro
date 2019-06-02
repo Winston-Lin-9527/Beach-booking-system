@@ -20,7 +20,9 @@ SOURCES += \
     usermodel.cpp \
     mainwindow.cpp \
     centralwidget.cpp \
-    createaccountwizard.cpp
+    createaccountwizard.cpp \
+    logindialog.cpp \
+    shopwindow.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -31,4 +33,6 @@ HEADERS += \
     usermodel.h \
     mainwindow.h \
     centralwidget.h \
-    createaccountwizard.h
+    createaccountwizard.h \
+    logindialog.h \
+    shopwindow.h

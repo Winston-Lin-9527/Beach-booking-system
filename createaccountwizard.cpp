@@ -10,6 +10,7 @@
 #include <QCheckBox>
 
 #include "createaccountwizard.h"
+#include "usermodel.h"
 
 CreateAccountWizard::CreateAccountWizard()
 {
@@ -270,6 +271,22 @@ SummaryPage::SummaryPage():QWizardPage(nullptr){
 bool SummaryPage::validatePage(){
     if(this->field("Summary.check") == true){
         QMessageBox::information(this, "Success", "The account has been sucessfully created!");
+        User newUser = {
+            QString(""),                            //1
+            field("Acc.username").toString(),          //2
+            field("Acc.password").toByteArray(),      //need to hash it
+            field("personal.firstname").toString(),         //4
+            field("personal.lastname").toString(),          //5
+            field("personal.address").toString(),           //6
+            field("personal.email").toString(),          //7
+            field("Acc.resortnumber").toInt(),          //9
+            field("sex").toBool(),               //need to make male = true, female = false
+            field("personal.DOB").toDate(),                 //11
+            field("Visa.number").toString(),        //12
+            field("Visa.expiryDate").toDate(),       //13
+            field("Visa.CVV").toString()              //14
+        };
+
         return true;    // allow exit when the checkbox is checked
     }
     else {
@@ -277,4 +294,3 @@ bool SummaryPage::validatePage(){
         return false;
     }
 }
-

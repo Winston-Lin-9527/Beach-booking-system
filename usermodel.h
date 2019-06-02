@@ -4,16 +4,22 @@
 #include <QString>
 #include <QAbstractItemModel>
 #include <QList>
+#include <QDate>
 
 struct User{
-    int _accountID;             //1
+    QString _accountID;         //1
     QString _userName;          //2
     QByteArray _passwordHash;   //3
-    QString _address;           //4
-    QString _email;             //5
-    short _age;                 //6
-    int _resortNumber;          //7
-    bool _isMale;               //8
+    QString _firstName;         //4
+    QString _lastName;          //5
+    QString _address;           //6
+    QString _email;             //7
+    int _resortNumber;          //9
+    bool _isMale;               //10
+    QDate _DOB;                 //11
+    QString _visaNumber;        //12
+    QDate _visaExpiryDate;      //13
+    QString _CVV;               //14
 
     // bool operator overload to check if another User object is equal to this one
 };

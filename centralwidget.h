@@ -19,8 +19,9 @@ public:
     virtual ~CentralWidget();
 
 public slots:
+    void createAccountButtonClicked();
     void bookingButtonClicked();
-//    void addAccount(User &newUser);
+    void addAccount(User &newUser);
 //    void editAccount();
 //    void removeAccount();
 
@@ -29,10 +30,9 @@ private:
     QPushButton *_bookingButton;
     QPushButton *_createAccountButton;
 
+    QLayout *_mainLayout;
     QStackedWidget *_stackedWindows;
     QWidget *_mainPage;
-
-    QLayout *_mainLayout;
 
     CreateAccountWizard *_createAccountWizard;
 

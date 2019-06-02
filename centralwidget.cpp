@@ -43,12 +43,41 @@ CentralWidget::CentralWidget(QWidget *parent)
 
     setLayout(_mainLayout);
 
-    connect(_createAccountButton, SIGNAL(clicked()), _createAccountWizard, SLOT(exec()));
+    connect(_createAccountButton, SIGNAL(clicked()), this, SLOT(createAccountButtonClicked()));
     connect(_bookingButton, SIGNAL(clicked()), this, SLOT(bookingButtonClicked()));
+
+//    connect(_createAccountWizard->page(5), SIGNAL(sendDetails(User &newUser)), this, SLOT(addAccount(User &newUser)));
 }
 
 CentralWidget::~CentralWidget(){}
 
+void CentralWidget::createAccountButtonClicked(){
+    this->_createAccountWizard->restart();
+    this->_createAccountWizard->exec();
+}
+
 void CentralWidget::bookingButtonClicked(){
     _stackedWindows->setCurrentIndex(1);
 }
+
+void CentralWidget::addAccount(User &newUser){
+    // usermodel add the userUser
+}
+
+//QString SummaryPage::createAccountID() const{
+//    srand(time(NULL));
+
+//    int ID[6];
+
+//    for (int i=0; i<6; ++i)
+//        ID[i] = rand() % 10;
+
+//        char s[6] = {0};
+//        int n = 0;
+
+//        for (int i = 0; i < 6; i++) {
+//            n += sprintf (&s[n], "%d", ID[i]);
+//        }
+
+//    return QString(s);
+//}

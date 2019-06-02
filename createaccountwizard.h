@@ -11,6 +11,8 @@ class QComboBox;
 class QScrollArea;
 class QCheckBox;
 
+class User;
+
 class CreateAccountWizard : public QWizard
 {
     Q_OBJECT
@@ -118,6 +120,9 @@ class SummaryPage : public QWizardPage
 public:
     SummaryPage();
     virtual bool validatePage() override;   // take advantage of the built-in mechanism
+
+signals:
+    void sendDetails(User &newUser);
 
 private:
     QCheckBox *_checkBox;
