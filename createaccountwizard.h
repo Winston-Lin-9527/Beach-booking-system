@@ -122,7 +122,7 @@ public:
     virtual bool validatePage() override;   // take advantage of the built-in mechanism
 
 signals:
-    void sendDetails(User &newUser);
+    void sendDetails(User &user);
 
 private:
     QCheckBox *_checkBox;

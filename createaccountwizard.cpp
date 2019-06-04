@@ -104,7 +104,7 @@ PersonalPage::PersonalPage():QWizardPage(nullptr){
     this->registerField("personal.address*", _addressLineEdit);
     this->registerField("personal.email*", _emailLineEdit);
     this->registerField("personal.DOB", _DOBDateEdit);
-    this->registerField("personal.sex", _sexComboBox);
+    this->registerField("personal.sex", _sexComboBox, "currentText");   // this allows register member of object
 
     QGridLayout *mainLayout = new QGridLayout;
 
@@ -280,12 +280,14 @@ bool SummaryPage::validatePage(){
             field("personal.address").toString(),           //6
             field("personal.email").toString(),          //7
             field("Acc.resortnumber").toInt(),          //9
-            field("sex").toBool(),               //need to make male = true, female = false
+            (field("personal.sex").toString() == "Male" ? true : false),  //need to make male = true, female = false
             field("personal.DOB").toDate(),                 //11
             field("Visa.number").toString(),        //12
             field("Visa.expiryDate").toDate(),       //13
             field("Visa.CVV").toString()              //14
         };
+
+        emit sendDetails(newUser);  // broadcast(send) the created user object to centralwidget
 
         return true;    // allow exit when the checkbox is checked
     }
