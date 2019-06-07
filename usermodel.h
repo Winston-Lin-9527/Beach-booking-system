@@ -14,14 +14,19 @@ struct User{
     QString _lastName;          //5
     QString _address;           //6
     QString _email;             //7
-    int _resortNumber;          //9
-    bool _isMale;               //10
-    QDate _DOB;                 //11
-    QString _visaNumber;        //12
-    QDate _visaExpiryDate;      //13
-    QString _CVV;               //14
+    int _resortNumber;          //8
+    bool _isMale;               //9
+    QDate _DOB;                 //10
+    QString _visaNumber;        //11
+    QDate _visaExpiryDate;      //12
+    QString _CVV;               //13        *13 fields
 
-    // bool operator overload to check if another User object is equal to this one
+    int operator == (const User &other) const {
+        if((_userName == other._userName) || (_email == other._email))
+            return 0;    // accountID and username and email subject to duplicate
+            // need to make this returns the different cases, duplicate username or duplicate email or duplicate visa...etc
+        }
+    // bool operator overloaded as non-member to check if another User object is equal to this one
 };
 
 class UserModel : public QAbstractItemModel

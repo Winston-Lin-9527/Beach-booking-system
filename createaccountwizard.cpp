@@ -102,7 +102,7 @@ PersonalPage::PersonalPage():QWizardPage(nullptr){
     this->registerField("personal.firstname*", _firstNameLineEdit);
     this->registerField("personal.lastname*", _lastNameLineEdit);
     this->registerField("personal.address*", _addressLineEdit);
-    this->registerField("personal.email*", _emailLineEdit);
+    this->registerField("personal.email", _emailLineEdit);
     this->registerField("personal.DOB", _DOBDateEdit);
     this->registerField("personal.sex", _sexComboBox, "currentText");   // this allows register member of object
 
@@ -272,19 +272,19 @@ bool SummaryPage::validatePage(){
     if(this->field("Summary.check") == true){
         QMessageBox::information(this, "Success", "The account has been sucessfully created!");
         User newUser = {
-            QString(""),                            //1
-            field("Acc.username").toString(),          //2
-            field("Acc.password").toByteArray(),      //need to hash it
-            field("personal.firstname").toString(),         //4
-            field("personal.lastname").toString(),          //5
-            field("personal.address").toString(),           //6
-            field("personal.email").toString(),          //7
-            field("Acc.resortnumber").toInt(),          //9
-            (field("personal.sex").toString() == "Male" ? true : false),  //need to make male = true, female = false
-            field("personal.DOB").toDate(),                 //11
-            field("Visa.number").toString(),        //12
-            field("Visa.expiryDate").toDate(),       //13
-            field("Visa.CVV").toString()              //14
+            QString(""),                                                     // 1
+            field("Acc.username").toString(),                                // 2
+            field("Acc.password").toByteArray(),                             // this is in plain text, hash in centralWidget
+            field("personal.firstname").toString(),                          // 4
+            field("personal.lastname").toString(),                           // 5
+            field("personal.address").toString(),                            // 6
+            field("personal.email").toString(),                              // 7
+            field("Acc.resortnumber").toInt(),                               // 9
+            (field("personal.sex").toString() == "Male" ? true : false),     // make male = true, female = false
+            field("personal.DOB").toDate(),                                  // 11
+            field("Visa.number").toString(),                                 // 12
+            field("Visa.expiryDate").toDate(),                               // 13
+            field("Visa.CVV").toString()                                     // 14
         };
 
         emit sendDetails(newUser);  // broadcast(send) the created user object to centralwidget

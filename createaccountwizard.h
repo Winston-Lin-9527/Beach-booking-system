@@ -11,7 +11,7 @@ class QComboBox;
 class QScrollArea;
 class QCheckBox;
 
-class User;
+struct User;
 
 class CreateAccountWizard : public QWizard
 {

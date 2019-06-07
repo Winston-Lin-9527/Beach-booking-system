@@ -5,6 +5,7 @@
 #include <QGroupBox>
 #include <QDialog>
 #include <QDebug>
+#include <QMessageBox>
 
 #include "centralwidget.h"
 #include "createaccountwizard.h"
@@ -12,10 +13,13 @@
 
 CentralWidget::CentralWidget(QWidget *parent)
 {
+    // key objects
     _stackedWindows = new QStackedWidget;
+    _userModel = new UserModel(this);
+
+    // dialogs
     _createAccountWizard = new CreateAccountWizard;
     _loginDialog = new loginDialog;
-    _userModel = new UserModel(this);
 
     // layouts structures
     _mainLayout = new QHBoxLayout(this);
@@ -62,6 +66,7 @@ CentralWidget::CentralWidget(QWidget *parent)
     connect(_bookingButton, SIGNAL(clicked()), this, SLOT(bookingButtonClicked()));
     connect(_createAccountWizard->page(4), SIGNAL(sendDetails(User&)), this, SLOT(addAccount(User&)));
     connect(_loginAccountButton, SIGNAL(clicked()), _loginDialog, SLOT(exec()));
+    connect(_loginDialog, SIGNAL(sendLoginCredentials(QString, QString)), this, SLOT(loginRequested(QString, QString)));
 }
 
 CentralWidget::~CentralWidget(){}
@@ -75,8 +80,62 @@ void CentralWidget::bookingButtonClicked(){
     _stackedWindows->setCurrentIndex(1);
 }
 
-void CentralWidget::addAccount(User &user){
-    // genAccountID() then add to userModel
+void CentralWidget::addAccount(User &newUserObject){
+    if(!this->_userModel->getUsers().contains(newUserObject)){   // uses overrided operator '=' in User struct here
+        // parameters: insert row before 0, add 13 rows, parent model index of the new row, in this case empty with no children,
+        // by Qt documentation a single column of (second parameter) rows will be added
+        this->_userModel->insertRows(0, 13, QModelIndex());
+
+        // only the _accountID field, or the primary key, has to be handled differently because it is determined by cen
+        newUserObject._accountID = this->genAccountID();
+
+        // this is done quite primitively, but there's nothing wrong, even more efficient than an extra loop! LMAOooo
+        QModelIndex index = this->_userModel->index(0, 0, QModelIndex());
+        this->_userModel->setData(index, newUserObject._accountID);
+
+        index = _userModel->index(0, 1, QModelIndex());
+        this->_userModel->setData(index, newUserObject._userName);
+
+        index = _userModel->index(0, 2, QModelIndex());
+        this->_userModel->setData(index, newUserObject._passwordHash);  // need to convert to hash not plain text
+
+        index = _userModel->index(0, 3, QModelIndex());
+        this->_userModel->setData(index, newUserObject._firstName);
+
+        index = _userModel->index(0, 4, QModelIndex());
+        this->_userModel->setData(index, newUserObject._lastName);
+
+        index = _userModel->index(0, 5, QModelIndex());
+        this->_userModel->setData(index, newUserObject._address);
+
+        index = _userModel->index(0, 6, QModelIndex());
+        this->_userModel->setData(index, newUserObject._email);
+
+        index = _userModel->index(0, 7, QModelIndex());
+        this->_userModel->setData(index, newUserObject._resortNumber);
+
+        index = _userModel->index(0, 8, QModelIndex());
+        this->_userModel->setData(index, newUserObject._isMale);
+
+        index = _userModel->index(0, 9, QModelIndex());
+        this->_userModel->setData(index, newUserObject._DOB);
+
+        index = _userModel->index(0, 10, QModelIndex());
+        this->_userModel->setData(index, newUserObject._visaNumber);
+
+        index = _userModel->index(0, 11, QModelIndex());
+        this->_userModel->setData(index, newUserObject._visaExpiryDate);
+
+        index = _userModel->index(0, 12, QModelIndex());
+        this->_userModel->setData(index, newUserObject._CVV);
+
+        qDebug() << "addAccount() called, first field: "<< newUserObject._CVV;
+    }
+    else{
+        QMessageBox::information(this, QString("Duplicate"),
+                   tr("The name \"%1\" already exists.").arg(newUserObject._userName));
+    }
+
 }
 
 QString CentralWidget::genAccountID() const{
@@ -96,3 +155,9 @@ QString CentralWidget::genAccountID() const{
 
     return QString(s);
 }
+
+
+//    // the reason for converting into a set is because QSet is a hash table underneath, only allow unique elements,
+//    // QSet::fromList auto filters the duplicates
+//    QSet<User> userHashSet = QSet<User>::fromList(this->_userModel->getUsers());
+

@@ -26,7 +26,9 @@ public:
 public slots:
     void createAccountButtonClicked();
     void bookingButtonClicked();
+
     void addAccount(User &user);
+//    void loginRequested(QString username, QString passwordInPlainText);
 
 //    void editAccount();
 //    void removeAccount();
