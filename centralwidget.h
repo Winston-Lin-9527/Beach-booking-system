@@ -1,9 +1,11 @@
 #ifndef CENTRALWIDGET_H
 #define CENTRALWIDGET_H
 
-#include <QWidget>
 #include "usermodel.h"
 #include "logindialog.h"
+
+#include <QWidget>
+#include <QCryptographicHash>
 
 class CreateAccountWizard;
 class QLabel;
@@ -22,13 +24,14 @@ public:
     virtual ~CentralWidget();
 
     QString genAccountID() const;
+    QByteArray toHash(QString stringToHash, QCryptographicHash::Algorithm) const;   // hash the password
 
 public slots:
     void createAccountButtonClicked();
     void bookingButtonClicked();
 
     void addAccount(User &user);
-//    void loginRequested(QString username, QString passwordInPlainText);
+    void loginRequested(QString username, QString passwordInPlainText);
 
 //    void editAccount();
 //    void removeAccount();
@@ -51,6 +54,7 @@ private:
     loginDialog *_loginDialog;
 
     UserModel *_userModel;
+    QString *_currentSessionUserID; // 6 digits ID
 };
 
 #endif // CENTRALWIDGET_H

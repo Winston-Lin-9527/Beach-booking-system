@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QVBoxLayout>
 
+#include "globals.h"
+
 class QDialogButtonBox;;
 class QStandardButton;
 class QLineEdit;
@@ -20,10 +22,11 @@ class loginDialog : public QDialog
 
 public:
     loginDialog();
+    void handleReturnStatus(StatusCode statusCode);
 
 signals:
     // no cancel button signal because can be handled by QDialog::reject in loginDialog()
-    void sendLoginCredentials(QString username, QString passwordInPlainText);
+    void requestLogin(QString username, QString passwordInPlainText);
 
 private slots:
     void loginActionCalled();   // make this a slot because easier to call when a 'reject' message is seen

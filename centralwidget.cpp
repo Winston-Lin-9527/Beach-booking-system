@@ -66,7 +66,7 @@ CentralWidget::CentralWidget(QWidget *parent)
     connect(_bookingButton, SIGNAL(clicked()), this, SLOT(bookingButtonClicked()));
     connect(_createAccountWizard->page(4), SIGNAL(sendDetails(User&)), this, SLOT(addAccount(User&)));
     connect(_loginAccountButton, SIGNAL(clicked()), _loginDialog, SLOT(exec()));
-    connect(_loginDialog, SIGNAL(sendLoginCredentials(QString, QString)), this, SLOT(loginRequested(QString, QString)));
+    connect(_loginDialog, SIGNAL(requestLogin(QString, QString)), this, SLOT(loginRequested(QString, QString)));
 }
 
 CentralWidget::~CentralWidget(){}
@@ -88,6 +88,13 @@ void CentralWidget::addAccount(User &newUserObject){
 
         // only the _accountID field, or the primary key, has to be handled differently because it is determined by cen
         newUserObject._accountID = this->genAccountID();
+        qDebug() << "the password before hash: "<< newUserObject._passwordHash;
+
+        // hash the password, and store in hash only, even the admins don't know the passwords.
+        // therefore prevent password breach, protects user and system security
+        // also use SHA256, very secure encryption algorithm
+        newUserObject._passwordHash = toHash(newUserObject._passwordHash, QCryptographicHash::Sha256);
+        qDebug() << "the hashed password: " << newUserObject._passwordHash.toHex();
 
         // this is done quite primitively, but there's nothing wrong, even more efficient than an extra loop! LMAOooo
         QModelIndex index = this->_userModel->index(0, 0, QModelIndex());
@@ -128,14 +135,11 @@ void CentralWidget::addAccount(User &newUserObject){
 
         index = _userModel->index(0, 12, QModelIndex());
         this->_userModel->setData(index, newUserObject._CVV);
-
-        qDebug() << "addAccount() called, first field: "<< newUserObject._CVV;
     }
     else{
         QMessageBox::information(this, QString("Duplicate"),
                    tr("The name \"%1\" already exists.").arg(newUserObject._userName));
     }
-
 }
 
 QString CentralWidget::genAccountID() const{
@@ -156,6 +160,18 @@ QString CentralWidget::genAccountID() const{
     return QString(s);
 }
 
+QByteArray CentralWidget::toHash(QString stringToHash, QCryptographicHash::Algorithm algorithm) const{
+    QCryptographicHash cryptoObject(algorithm);
+    cryptoObject.addData(stringToHash.toLatin1());    // alternative QString::toUTF8 toLocal8Bit
+
+    return cryptoObject.result();
+}
+
+void CentralWidget::loginRequested(QString username, QString passwordInPlainText){
+    qDebug() << "login request is received";
+
+    this->_loginDialog->handleReturnStatus(StatusCode::LOGIN_FAILURE_NONMATCHING_CREDENTIALS);
+}
 
 //    // the reason for converting into a set is because QSet is a hash table underneath, only allow unique elements,
 //    // QSet::fromList auto filters the duplicates

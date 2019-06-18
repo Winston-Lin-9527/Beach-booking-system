@@ -77,9 +77,8 @@ class AccSettingPage : public QWizardPage
 
 public:
     AccSettingPage();
-
-public slots:
-    void checkPasswordValidity();
+    virtual bool validatePage() override;   // override member function to check password length
+    bool checkPasswordValidity();
 
 private:
     QLineEdit *_usernameLineEdit;

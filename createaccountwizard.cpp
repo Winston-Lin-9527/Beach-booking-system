@@ -11,6 +11,7 @@
 
 #include "createaccountwizard.h"
 #include "usermodel.h"
+#include "globals.h"
 
 CreateAccountWizard::CreateAccountWizard()
 {
@@ -140,21 +141,21 @@ AccSettingPage::AccSettingPage():QWizardPage(nullptr){
     // pixmap
 
     _usernameLineEdit = new QLineEdit;
-    _usernameLineEdit->setMaxLength(10);
+    _usernameLineEdit->setMaxLength(GLOBALS_USERNAME_MAX_CHARACTER);
     _usernameLineEdit->setMaximumWidth(150);
 
     _passwordLineEdit = new QLineEdit;
     _passwordLineEdit->setEchoMode(QLineEdit::PasswordEchoOnEdit);
-    _passwordLineEdit->setMaxLength(8);
+    _passwordLineEdit->setMaxLength(GLOBALS_PASSWORD_MAX_CHARACTER);
     _passwordLineEdit->setMaximumWidth(150);
 
     _passwordConfirmLineEdit = new QLineEdit;
     _passwordConfirmLineEdit->setEchoMode(QLineEdit::Password);
-    _passwordConfirmLineEdit->setMaxLength(8);
+    _passwordConfirmLineEdit->setMaxLength(GLOBALS_PASSWORD_MAX_CHARACTER);
     _passwordConfirmLineEdit->setMaximumWidth(150);
 
     _resortNumberLineEdit = new QLineEdit;
-    _resortNumberLineEdit->setMaxLength(4);     // resort room number are all 4 digits
+    _resortNumberLineEdit->setMaxLength(GLOBALS_RESORT_NUMBER_CHARACTER);     // resort room number are all 4 digits
     _resortNumberLineEdit->setMaximumWidth(40);
 
     _usernameLabel = new QLabel("Username:");
@@ -190,20 +191,34 @@ AccSettingPage::AccSettingPage():QWizardPage(nullptr){
     mainLayout->addLayout(resortNumberHorizontalLayout);
 
     this->setLayout(mainLayout);
-
-    connect(_passwordConfirmLineEdit, &QLineEdit::editingFinished, this, &AccSettingPage::checkPasswordValidity);
 }
 
 /*
  * this function responds to password and confirm password views
  */
-void AccSettingPage::checkPasswordValidity(){
-    if(_passwordLineEdit->text() != _passwordConfirmLineEdit->text()){
-        QMessageBox::about(this, "Warning", "Passwords don't match!");
-        _passwordConfirmLineEdit->clear();
-        _passwordLineEdit->clear();
+bool AccSettingPage::checkPasswordValidity(){
+    if(_passwordLineEdit->text() != _passwordConfirmLineEdit->text())
+        return false;
+    else
+        return true;
+}
 
-        _passwordLineEdit->setFocus();      // place the cursor back to password line edit
+bool AccSettingPage::validatePage(){
+    if(this->_passwordLineEdit->text().length() >= GLOBALS_PASSWORD_MIN_CHARACTER && this->_usernameLineEdit->text().length() >= GLOBALS_USERNAME_MIN_CHARACTER){
+        if(this->checkPasswordValidity())
+            return true;        // only return true when both conditons are met, otherwise don't allow to proceed
+        else{
+            QMessageBox::about(this, "Warning", "Passwords don't match!");
+            _passwordConfirmLineEdit->clear();
+            _passwordLineEdit->clear();
+
+            _passwordLineEdit->setFocus();      // place the cursor back to password line edit
+            return false;
+        }
+    }
+    else {
+        QMessageBox::warning(this, "Warning", "The username and password must have at least 5 characters");
+        return false;
     }
 }
 

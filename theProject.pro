@@ -35,4 +35,5 @@ HEADERS += \
     centralwidget.h \
     createaccountwizard.h \
     logindialog.h \
-    shopwindow.h
+    shopwindow.h \
+    globals.h
