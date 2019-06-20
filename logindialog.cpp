@@ -8,7 +8,7 @@
 #include <QDebug>
 #include <QMessageBox>
 
-loginDialog::loginDialog() : QDialog()
+LoginDialog::LoginDialog() : QDialog()
 {
     _buttonBox = new QDialogButtonBox();
     _buttonBox->addButton("Login", QDialogButtonBox::AcceptRole);
@@ -17,11 +17,13 @@ loginDialog::loginDialog() : QDialog()
     _lineEditUsername = new QLineEdit;
     _lineEditPassword = new QLineEdit;
 
-    _lineEditUsername->setPlaceholderText("");
-    _lineEditPassword->setPlaceholderText("");
-
     _lineEditUsernameLabel = new QLabel("Username:");
-    _lineEditPasswordLabel = new QLabel("Password");
+    _lineEditUsername->setPlaceholderText("");
+    _lineEditUsername->setMaxLength(GLOBALS_USERNAME_MAX_CHARACTER);
+
+    _lineEditPasswordLabel = new QLabel("Password: ");
+    _lineEditPassword->setPlaceholderText("");
+    _lineEditPassword->setMaxLength(GLOBALS_PASSWORD_MAX_CHARACTER);
 
     _mainLayout = new QVBoxLayout;
 
@@ -40,10 +42,10 @@ loginDialog::loginDialog() : QDialog()
     this->setLayout(_mainLayout);
 
     connect(_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    connect(_buttonBox, &QDialogButtonBox::accepted, this, &loginDialog::loginActionCalled);
+    connect(_buttonBox, &QDialogButtonBox::accepted, this, &LoginDialog::loginActionCalled);
 }
 
-void loginDialog::loginActionCalled(){
+void LoginDialog::loginActionCalled(){
     qDebug() << "loginActionCalled() called";
 
     if(this->_lineEditUsername->text().length() >= GLOBALS_USERNAME_MIN_CHARACTER && this->_lineEditPassword->text().length() >= GLOBALS_PASSWORD_MIN_CHARACTER)
@@ -53,7 +55,7 @@ void loginDialog::loginActionCalled(){
         QMessageBox::warning(this, "Error", "Please login using credentials in valid form"); }
 }
 
-void loginDialog::handleReturnStatus(StatusCode statusCode){
+void LoginDialog::handleReturnStatus(StatusCode statusCode){
     QMessageBox *msgBox = new QMessageBox;
 
     if(statusCode == StatusCode::LOGIN_SUCCESS){
@@ -62,6 +64,10 @@ void loginDialog::handleReturnStatus(StatusCode statusCode){
         msgBox->setStandardButtons(QMessageBox::Ok);
         msgBox->setDefaultButton(QMessageBox::Ok);
         msgBox->exec();
+
+        this->_lineEditUsername->clear();
+        this->_lineEditPassword->clear();
+
         this->close();
     }
 
@@ -72,8 +78,27 @@ void loginDialog::handleReturnStatus(StatusCode statusCode){
         msgBox->setDefaultButton(QMessageBox::Retry);
         int result = msgBox->exec();
 
+        this->_lineEditPassword->clear();
+
         if(result == QMessageBox::Cancel)
             this->close();          // close the loginDialog if the user wants to give up, else if retry button clicked stay at the dialog
+    }
+
+    else if(statusCode == StatusCode::LOGIN_FAILURE_NON_EXIST_USER){
+        msgBox->setText("Login Failure");
+        msgBox->setInformativeText("This user doesn't exist.");
+        msgBox->setStandardButtons(QMessageBox::Retry | QMessageBox::Cancel);
+        msgBox->setDefaultButton(QMessageBox::Retry);
+        int result = msgBox->exec();
+
+        this->_lineEditUsername->clear();
+
+        if(result == QMessageBox::Cancel){
+            this->_lineEditUsername->clear();
+            this->_lineEditPassword->clear();
+
+            this->close();
+        }
     }
 }
 

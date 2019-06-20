@@ -2,12 +2,12 @@
 #define CENTRALWIDGET_H
 
 #include "usermodel.h"
-#include "logindialog.h"
 
 #include <QWidget>
 #include <QCryptographicHash>
 
 class CreateAccountWizard;
+class LoginDialog;
 class QLabel;
 class QStackedWidget;
 class QPushButton;
@@ -25,6 +25,9 @@ public:
 
     QString genAccountID() const;
     QByteArray toHash(QString stringToHash, QCryptographicHash::Algorithm) const;   // hash the password
+
+    void saveToFile();
+    void loadFromFile();
 
 public slots:
     void createAccountButtonClicked();
@@ -51,10 +54,11 @@ private:
     QGridLayout *_bookingLayout;
 
     CreateAccountWizard *_createAccountWizard;
-    loginDialog *_loginDialog;
+    LoginDialog *_loginDialog;
 
     UserModel *_userModel;
-    QString *_currentSessionUserID; // 6 digits ID
+    bool _isCurrentlyLogin;
+    QString _currentSessionUserID; // 6 digits ID
 };
 
 #endif // CENTRALWIDGET_H

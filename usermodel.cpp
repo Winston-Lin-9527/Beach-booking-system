@@ -3,11 +3,7 @@
 #include <QDate>
 
 UserModel::UserModel(QObject *parent):QAbstractItemModel(parent)
-{}
-
-UserModel::UserModel(User user, QObject *parent):QAbstractItemModel(parent)
 {
-    this->_users.push_back(user);
 }
 
 int UserModel::rowCount(const QModelIndex &index) const{

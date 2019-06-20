@@ -15,13 +15,13 @@ class QLabel;
  *  this is a generic class used for login dialog
  */
 
-class loginDialog : public QDialog
+class LoginDialog : public QDialog
 {
 
     Q_OBJECT
 
 public:
-    loginDialog();
+    LoginDialog();
     void handleReturnStatus(StatusCode statusCode);
 
 signals:

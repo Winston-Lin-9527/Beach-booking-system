@@ -9,6 +9,7 @@
 
 #include "centralwidget.h"
 #include "createaccountwizard.h"
+#include "logindialog.h"
 #include "usermodel.h"
 
 CentralWidget::CentralWidget(QWidget *parent)
@@ -16,10 +17,12 @@ CentralWidget::CentralWidget(QWidget *parent)
     // key objects
     _stackedWindows = new QStackedWidget;
     _userModel = new UserModel(this);
+    _isCurrentlyLogin = false;
+    _currentSessionUserID = "";
 
     // dialogs
     _createAccountWizard = new CreateAccountWizard;
-    _loginDialog = new loginDialog;
+    _loginDialog = new LoginDialog;
 
     // layouts structures
     _mainLayout = new QHBoxLayout(this);
@@ -81,20 +84,19 @@ void CentralWidget::bookingButtonClicked(){
 }
 
 void CentralWidget::addAccount(User &newUserObject){
+
     if(!this->_userModel->getUsers().contains(newUserObject)){   // uses overrided operator '=' in User struct here
-        // parameters: insert row before 0, add 13 rows, parent model index of the new row, in this case empty with no children,
+        // parameters: insert 1 rows before existing, parent model index of the new row, in this case empty with no children,
         // by Qt documentation a single column of (second parameter) rows will be added
-        this->_userModel->insertRows(0, 13, QModelIndex());
+        this->_userModel->insertRows(0, 1, QModelIndex());
 
         // only the _accountID field, or the primary key, has to be handled differently because it is determined by cen
         newUserObject._accountID = this->genAccountID();
-        qDebug() << "the password before hash: "<< newUserObject._passwordHash;
 
         // hash the password, and store in hash only, even the admins don't know the passwords.
         // therefore prevent password breach, protects user and system security
         // also use SHA256, very secure encryption algorithm
         newUserObject._passwordHash = toHash(newUserObject._passwordHash, QCryptographicHash::Sha256);
-        qDebug() << "the hashed password: " << newUserObject._passwordHash.toHex();
 
         // this is done quite primitively, but there's nothing wrong, even more efficient than an extra loop! LMAOooo
         QModelIndex index = this->_userModel->index(0, 0, QModelIndex());
@@ -140,6 +142,8 @@ void CentralWidget::addAccount(User &newUserObject){
         QMessageBox::information(this, QString("Duplicate"),
                    tr("The name \"%1\" already exists.").arg(newUserObject._userName));
     }
+    qDebug() << "account id before savetofile : " << newUserObject._accountID;
+    saveToFile();
 }
 
 QString CentralWidget::genAccountID() const{
@@ -168,10 +172,78 @@ QByteArray CentralWidget::toHash(QString stringToHash, QCryptographicHash::Algor
 }
 
 void CentralWidget::loginRequested(QString username, QString passwordInPlainText){
-    qDebug() << "login request is received";
 
-    this->_loginDialog->handleReturnStatus(StatusCode::LOGIN_FAILURE_NONMATCHING_CREDENTIALS);
+    QByteArray passwordInHash = this->toHash(passwordInPlainText, QCryptographicHash::Sha256);
+
+    qDebug() << "entered " << passwordInHash.toHex();
+
+    QModelIndex index = QModelIndex();
+    bool found = false;
+
+    for(int row = 0; row < this->_userModel->getUsers().size() + 1; row++){
+         index = this->_userModel->index(row, 1, QModelIndex());
+         if(username == this->_userModel->data(index, Qt::DisplayRole)){
+             qDebug() << "login successful";
+             found = true;
+             // if user exists then check the password
+             index = this->_userModel->index(row, 2, QModelIndex());
+
+             if(passwordInHash == this->_userModel->data(index, Qt::DisplayRole)){
+                  // the credentials are now verified.
+
+                 index = this->_userModel->index(row, 0, QModelIndex());
+                 this->_currentSessionUserID = this->_userModel->data(index, Qt::DisplayRole).toString();
+
+                 this->_loginDialog->handleReturnStatus(StatusCode::LOGIN_SUCCESS);
+                 this->_isCurrentlyLogin = true;
+             }
+             else{
+                 this->_loginDialog->handleReturnStatus(StatusCode::LOGIN_FAILURE_NONMATCHING_CREDENTIALS);
+                 qDebug() << "Login failure: username and password don't match! ";
+             }
+         }
+    }
+    if(!found){
+        this->_loginDialog->handleReturnStatus(StatusCode::LOGIN_FAILURE_NON_EXIST_USER);
+        qDebug() << "login failure: username " << username << " doesn't exist";
+    }
 }
+
+void CentralWidget::saveToFile(){
+    QFile file("userBase.txt");
+
+    if (!file.open(QIODevice::WriteOnly)) {
+            QMessageBox::information(this, tr("Unable to open file"), file.errorString());
+            return;
+        }
+        qDebug() << "account id2: " << _userModel->getUsers().at(0)._accountID;
+
+        QTextStream out(&file);
+
+        for(int i = 0; i < _userModel->getUsers().size(); i++){
+            User temp = _userModel->getUsers().at(0);
+
+            out << temp._accountID<<endl;
+            out << temp._userName<<endl;
+            out << temp._passwordHash.toHex()<<endl;
+            out << temp._firstName<<endl;
+            out << temp._lastName<<endl;
+            out << temp._address<<endl;
+            out << temp._email<<endl;
+            out << temp._resortNumber<<endl;
+            out << temp._isMale<<endl;
+            out << temp._DOB.toString()<<endl;
+            out << temp._visaNumber<<endl;
+            out << temp._visaExpiryDate.toString()<<endl;
+            out << temp._CVV<<endl;
+        }
+        file.close();
+}
+
+void CentralWidget::loadFromFile(){
+
+}
+
 
 //    // the reason for converting into a set is because QSet is a hash table underneath, only allow unique elements,
 //    // QSet::fromList auto filters the duplicates
