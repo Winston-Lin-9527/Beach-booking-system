@@ -36,7 +36,7 @@ struct User{
 inline QTextStream &operator<< (QTextStream &out, User &user){
        out << user._accountID<<endl;
        out << user._userName<<endl;
-       out << user._passwordHash.toHex()<<endl;
+       out << user._passwordHash<<endl;
        out << user._firstName<<endl;
        out << user._lastName<<endl;
        out << user._address<<endl;

@@ -89,7 +89,7 @@ void CentralWidget::bookingButtonClicked(){
 
 void CentralWidget::addAccount(User &newUserObject){
 
-    if(!this->_userModel->getUsers().contains(newUserObject)){   // uses overrided operator '=' in User struct here
+   // if(!this->_userModel->getUsers().contains(newUserObject)){   // uses overrided operator '=' in User struct here
         // parameters: insert 1 rows before existing, parent model index of the new row, in this case empty with no children,
         // by Qt documentation a single column of (second parameter) rows will be added
         this->_userModel->insertRows(0, 1, QModelIndex());
@@ -101,6 +101,7 @@ void CentralWidget::addAccount(User &newUserObject){
         // therefore prevent password breach, protects user and system security
         // also use SHA256, very secure encryption algorithm
         newUserObject._passwordHash = toHash(newUserObject._passwordHash, QCryptographicHash::Sha256);
+        qDebug() << "passwordhash: " << newUserObject._passwordHash;
 
         // this is done quite primitively, but there's nothing wrong, even more efficient than an extra loop! LMAOooo
         QModelIndex index = this->_userModel->index(0, 0, QModelIndex());
@@ -110,7 +111,7 @@ void CentralWidget::addAccount(User &newUserObject){
         this->_userModel->setData(index, newUserObject._userName);
 
         index = _userModel->index(0, 2, QModelIndex());
-        this->_userModel->setData(index, newUserObject._passwordHash);  // need to convert to hash not plain text
+        this->_userModel->setData(index, newUserObject._passwordHash);
 
         index = _userModel->index(0, 3, QModelIndex());
         this->_userModel->setData(index, newUserObject._firstName);
@@ -142,11 +143,12 @@ void CentralWidget::addAccount(User &newUserObject){
 
         index = _userModel->index(0, 12, QModelIndex());
         this->_userModel->setData(index, newUserObject._CVV);
-    }
-    else{
-        QMessageBox::information(this, QString("Duplicate"),
-                   tr("The name \"%1\" already exists.").arg(newUserObject._userName));
-    }
+//    }
+//    else{
+//        QMessageBox::information(this, QString("Duplicate"),
+//                   tr("The name \"%1\" already exists.").arg(newUserObject._userName));
+//    }
+    qDebug() << "now there are "<< _userModel->getUsers().size() << " users ";
     saveToFile();
 }
 
@@ -171,29 +173,28 @@ QString CentralWidget::genAccountID() const{
 QByteArray CentralWidget::toHash(QString stringToHash, QCryptographicHash::Algorithm algorithm) const{
     QCryptographicHash cryptoObject(algorithm);
     cryptoObject.addData(stringToHash.toLatin1());    // alternative QString::toUTF8 toLocal8Bit
-
-    return cryptoObject.result();
+    qDebug() << "toHash() returns " << cryptoObject.result().toHex();
+    return cryptoObject.result().toHex();
 }
 
 void CentralWidget::loginRequested(QString username, QString passwordInPlainText){
 
     QByteArray passwordInHash = this->toHash(passwordInPlainText, QCryptographicHash::Sha256);
 
-    qDebug() << "entered " << passwordInHash.toHex();
-
     QModelIndex index = QModelIndex();
     bool found = false;
+    index = this->_userModel->index(0, 2, QModelIndex());
 
-    for(int row = 0; row < this->_userModel->getUsers().size() + 1; row++){
+    for(int row = 0; row < this->_userModel->getUsers().size(); row++){
          index = this->_userModel->index(row, 1, QModelIndex());
          if(username == this->_userModel->data(index, Qt::DisplayRole)){
-             qDebug() << "login successful";
              found = true;
              // if user exists then check the password
              index = this->_userModel->index(row, 2, QModelIndex());
 
-             if(passwordInHash == this->_userModel->data(index, Qt::DisplayRole)){
+             if(passwordInHash == this->_userModel->data(index, Qt::DisplayRole).toByteArray()){
                   // the credentials are now verified.
+                 qDebug() << "login successful";
 
                  index = this->_userModel->index(row, 0, QModelIndex());
                  this->_currentSessionUserID = this->_userModel->data(index, Qt::DisplayRole).toString();
@@ -238,8 +239,8 @@ void CentralWidget::loadFromFile(){
     QFile file(this->_userFileDirectory);
 
        if (!file.open(QIODevice::ReadOnly)) {
-           QMessageBox::information(this, tr("Unable to open file"),
-               file.errorString());
+           QMessageBox::information(this, tr("Warning"),
+               "Couldn't find database in directory, now creating new one.");
            return;
        }
 
