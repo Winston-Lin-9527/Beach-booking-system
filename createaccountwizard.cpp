@@ -8,6 +8,7 @@
 #include <QComboBox>
 #include <QScrollArea>
 #include <QCheckBox>
+#include <QDebug>
 
 #include "createaccountwizard.h"
 #include "usermodel.h"

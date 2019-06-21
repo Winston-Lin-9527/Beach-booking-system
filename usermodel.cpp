@@ -114,12 +114,20 @@ bool UserModel::setData(const QModelIndex &index, const QVariant &value, int rol
         User user = _users.value(index.row());
 
         switch(index.column()){
-            case 0: user._accountID = value.toInt(); break;
+            case 0: user._accountID = value.toString(); break;
             case 1: user._userName = value.toString(); break;
             case 2: user._passwordHash = value.toByteArray(); break;
-            case 3: user._address = value.toString(); break;
-            case 4: user._email = value.toString(); break;
-            // populate more fields here later
+            case 3: user._firstName = value.toString(); break;
+            case 4: user._lastName = value.toString(); break;
+            case 5: user._address = value.toString(); break;
+            case 6: user._email = value.toString(); break;
+            case 7: user._resortNumber = value.toInt(); break;
+            case 8: user._isMale = value.toBool(); break;   // good thing to note this enum to bool logics is done in createAccountWizard
+            case 9: user._DOB = value.toDate(); break;
+            case 10: user._visaNumber = value.toString(); break;
+            case 11: user._visaExpiryDate = value.toDate(); break;
+            case 12: user._CVV = value.toString(); break;
+
             default: return false;
         }
 

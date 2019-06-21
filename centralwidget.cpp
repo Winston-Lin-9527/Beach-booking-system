@@ -128,6 +128,7 @@ void CentralWidget::addAccount(User &newUserObject){
 
         index = _userModel->index(0, 9, QModelIndex());
         this->_userModel->setData(index, newUserObject._DOB);
+        qDebug() << "DOB before savetoFile: " << newUserObject._DOB;
 
         index = _userModel->index(0, 10, QModelIndex());
         this->_userModel->setData(index, newUserObject._visaNumber);
@@ -142,7 +143,6 @@ void CentralWidget::addAccount(User &newUserObject){
         QMessageBox::information(this, QString("Duplicate"),
                    tr("The name \"%1\" already exists.").arg(newUserObject._userName));
     }
-    qDebug() << "account id before savetofile : " << newUserObject._accountID;
     saveToFile();
 }
 
@@ -232,9 +232,9 @@ void CentralWidget::saveToFile(){
             out << temp._email<<endl;
             out << temp._resortNumber<<endl;
             out << temp._isMale<<endl;
-            out << temp._DOB.toString()<<endl;
+            out << temp._DOB.toString("yyyy.MM.dd")<<endl;
             out << temp._visaNumber<<endl;
-            out << temp._visaExpiryDate.toString()<<endl;
+            out << temp._visaExpiryDate.toString("yyyy.MM.dd")<<endl;
             out << temp._CVV<<endl;
         }
         file.close();
