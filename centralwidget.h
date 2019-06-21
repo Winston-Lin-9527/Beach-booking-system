@@ -59,6 +59,7 @@ private:
     UserModel *_userModel;
     bool _isCurrentlyLogin;
     QString _currentSessionUserID; // 6 digits ID
+    QString _userFileDirectory;
 };
 
 #endif // CENTRALWIDGET_H

@@ -6,6 +6,7 @@
 #include <QDialog>
 #include <QDebug>
 #include <QMessageBox>
+#include <QFileDialog>
 
 #include "centralwidget.h"
 #include "createaccountwizard.h"
@@ -19,6 +20,7 @@ CentralWidget::CentralWidget(QWidget *parent)
     _userModel = new UserModel(this);
     _isCurrentlyLogin = false;
     _currentSessionUserID = "";
+    _userFileDirectory = "userBase.txt";    // by default the file storing is userBase.txt, this allows for customization
 
     // dialogs
     _createAccountWizard = new CreateAccountWizard;
@@ -64,6 +66,8 @@ CentralWidget::CentralWidget(QWidget *parent)
 
     _mainLayout->addWidget(_stackedWindows);
     setLayout(_mainLayout);
+
+    loadFromFile();
 
     connect(_createAccountButton, SIGNAL(clicked()), this, SLOT(createAccountButtonClicked()));
     connect(_bookingButton, SIGNAL(clicked()), this, SLOT(bookingButtonClicked()));
@@ -209,43 +213,48 @@ void CentralWidget::loginRequested(QString username, QString passwordInPlainText
     }
 }
 
+/*
+ *  the logics behind saveToFile() and loadFromFile() are back in userModel.h, which makes these two look clean.
+ */
 void CentralWidget::saveToFile(){
-    QFile file("userBase.txt");
+    QFile file(this->_userFileDirectory);
 
     if (!file.open(QIODevice::WriteOnly)) {
             QMessageBox::information(this, tr("Unable to open file"), file.errorString());
             return;
         }
-        qDebug() << "account id2: " << _userModel->getUsers().at(0)._accountID;
 
-        QTextStream out(&file);
+        QTextStream outStream(&file);
+        outStream<<this->_userModel->getUsers();
 
-        for(int i = 0; i < _userModel->getUsers().size(); i++){
-            User temp = _userModel->getUsers().at(0);
-
-            out << temp._accountID<<endl;
-            out << temp._userName<<endl;
-            out << temp._passwordHash.toHex()<<endl;
-            out << temp._firstName<<endl;
-            out << temp._lastName<<endl;
-            out << temp._address<<endl;
-            out << temp._email<<endl;
-            out << temp._resortNumber<<endl;
-            out << temp._isMale<<endl;
-            out << temp._DOB.toString("yyyy.MM.dd")<<endl;
-            out << temp._visaNumber<<endl;
-            out << temp._visaExpiryDate.toString("yyyy.MM.dd")<<endl;
-            out << temp._CVV<<endl;
-        }
         file.close();
 }
 
 void CentralWidget::loadFromFile(){
+//    QString fileName = QFileDialog::getSaveFileName(this,
+//           tr("Save Address Book"), "",
+//           tr("Address Book (*.abk);;All Files (*)"));
 
+    QFile file(this->_userFileDirectory);
+
+       if (!file.open(QIODevice::ReadOnly)) {
+           QMessageBox::information(this, tr("Unable to open file"),
+               file.errorString());
+           return;
+       }
+
+       QTextStream inStream(&file);
+
+       inStream >> _userModel->getUsersAddress();
+       qDebug() << "Loaded database has size: " << _userModel->getUsers().size();
+       qDebug() << "first loaded user has id: " << _userModel->getUsers().at(0)._accountID;
+       qDebug() << "first loaded user has userName: " << _userModel->getUsers().at(0)._userName;
+       qDebug() << "first loaded user has PasswordHash: " << _userModel->getUsers().at(0)._passwordHash;
+       qDebug() << "first loaded user has firstname: " << _userModel->getUsers().at(0)._firstName;
+       qDebug() << "first loaded user has lastname: " << _userModel->getUsers().at(0)._lastName;
+       qDebug() << "first loaded user has dob: " << _userModel->getUsers().at(0)._DOB.toString("yyyy.MM.dd");
+       qDebug() << "first loaded user has ismale: " << _userModel->getUsers().at(0)._isMale;
+
+       // this is complete success
+       file.close();
 }
-
-
-//    // the reason for converting into a set is because QSet is a hash table underneath, only allow unique elements,
-//    // QSet::fromList auto filters the duplicates
-//    QSet<User> userHashSet = QSet<User>::fromList(this->_userModel->getUsers());
-

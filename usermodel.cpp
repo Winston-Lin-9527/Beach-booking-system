@@ -152,3 +152,7 @@ Qt::ItemFlags UserModel::flags(const QModelIndex &index) const{
 QList<User> UserModel::getUsers()const{
     return this->_users;
 }
+
+QList<User> *UserModel::getUsersAddress(){
+    return &this->_users;
+}

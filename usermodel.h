@@ -31,60 +31,72 @@ struct User{
 };
 
 // overload these two operators ( << and >> ) to help format input and output of an User object's fields
-//QDataStream &operator<< (QDataStream &out, User &user){
-//       out << user._accountID;
-//       out << user._userName;
-//       out << user._passwordHash;
-//       out << user._firstName;
-//       out << user._lastName;
-//       out << user._address;
-//       out << user._email;
-//       out << user._resortNumber;
-//       out << user._isMale;
-//       out << user._DOB;
-//       out << user._visaNumber;
-//       out << user._visaExpiryDate;
-//       out << user._CVV;
+// the inline are very important, if no online keyword then duplicate symbol error will occur.
 
-//       return out;
-//}
+inline QTextStream &operator<< (QTextStream &out, User &user){
+       out << user._accountID<<endl;
+       out << user._userName<<endl;
+       out << user._passwordHash.toHex()<<endl;
+       out << user._firstName<<endl;
+       out << user._lastName<<endl;
+       out << user._address<<endl;
+       out << user._email<<endl;
+       out << user._resortNumber<<endl;
+       out << user._isMale<<endl;
+       out << user._DOB.toString("yyyy.MM.dd")<<endl;
+       out << user._visaNumber;
+       out << user._visaExpiryDate.toString("yyyy.MM.dd")<<endl;
+       out << user._CVV<<endl;
 
-//QDataStream &operator>> (QDataStream &in, User &user){
-//    in >> user._accountID;
-//    in << user._userName;
-//    in << user._passwordHash;
-//    in << user._firstName;
-//    in << user._lastName;
-//    in << user._address;
-//    in << user._email;
-//    in << user._resortNumber;
-//    in << user._isMale;
-//    in << user._DOB;
-//    in << user._visaNumber;
-//    in << user._visaExpiryDate;
-//    in << user._CVV;
+       return out;
+}
 
-//    return in;
-//}
+inline QTextStream &operator>> (QTextStream &in, User *user){
+    QString temp;
 
-//QDataStream &operator<< (QDataStream &out, QList<User> &users){
-//    for(int i = 0; i < users.size(); i++){
-//            User user = users.at(i);
-//            out << user;
-//    }
-//    return out;
-//}
+    in >> user->_accountID;
+    in >> user->_userName;
+    in >> user->_passwordHash;
+    in >> user->_firstName;
+    in >> user->_lastName;
+    in >> user->_address;
+    in >> user->_email;
+    in >> user->_resortNumber;
+    in >> temp;
+    user->_isMale = temp == "1" ? true : false;
+    in >> temp;
+    user->_DOB = QDate::fromString(temp, "yyyy.MM.dd");
+    in >> user->_visaNumber;
+    in >> temp;
+    user->_visaExpiryDate = QDate::fromString(temp, "yyyy.MM.dd");
+    in >> user->_CVV;
 
-//QDataStream &operator>> (QDataStream &in, QList<User> &users){
-//    for(int i = 0; i < users.size(); i++)
-//        {
-//            User user;
-//            in >> user;
-//            users.push_back(user);
-//        }
+    return in;
+}
 
-//        return in;
-//}
+inline QTextStream &operator<< (QTextStream &out, const QList<User> &users){
+    out << users.size() << endl;
+
+    for(int i = 0; i < users.size(); i++){
+            User user = users.at(i);
+            out << user;
+    }
+    return out;
+}
+
+inline QTextStream &operator>> (QTextStream &in, QList<User> *users){
+    int count = 0;
+    in >> count;
+
+    for(int i = 0; i < count; i++)
+        {
+            User *user = new User;
+            in >> user;
+            users->push_back(*user);
+        }
+
+        return in;
+}
 
 class UserModel : public QAbstractItemModel
 {
@@ -103,7 +115,8 @@ public:
     bool insertRows(int position, int rows, const QModelIndex &index = QModelIndex()) override;
     bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex()) override;
     QList<User> getUsers() const;
-
+    QList<User> *getUsersAddress(); // this function exposes the _users entirely, actually making insertRows and removeRows meaningless.
+                                    // and ruining the encapsulation.
 private:
     QList<User> _users;
 };
