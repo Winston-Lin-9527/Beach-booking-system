@@ -42,7 +42,7 @@ CentralWidget::CentralWidget(QWidget *parent)
     _loginAccountButton = new QPushButton("Login");
 
     // elements of the booking page
-    QLabel *label2 = new QLabel("ddd");
+    _bookingWindow = new BookingWindow();
 
     // first page
     this->_introLayout->setMargin(5);
@@ -55,7 +55,7 @@ CentralWidget::CentralWidget(QWidget *parent)
     // second page
     this->_bookingLayout = new QGridLayout(this);
     _bookingLayout->setSpacing(10);
-    _bookingLayout->addWidget(label2, 0, 0);
+    _bookingLayout->addWidget(_bookingWindow, 0, 0);
     _bookingPageObject->setLayout(_bookingLayout);
 
     /*
@@ -88,8 +88,7 @@ void CentralWidget::bookingButtonClicked(){
 }
 
 void CentralWidget::addAccount(User &newUserObject){
-
-   // if(!this->_userModel->getUsers().contains(newUserObject)){   // uses overrided operator '=' in User struct here
+    if(!this->_userModel->getUsers().contains(newUserObject)){   // uses overrided operator '=' in User struct here
         // parameters: insert 1 rows before existing, parent model index of the new row, in this case empty with no children,
         // by Qt documentation a single column of (second parameter) rows will be added
         this->_userModel->insertRows(0, 1, QModelIndex());
@@ -101,7 +100,6 @@ void CentralWidget::addAccount(User &newUserObject){
         // therefore prevent password breach, protects user and system security
         // also use SHA256, very secure encryption algorithm
         newUserObject._passwordHash = toHash(newUserObject._passwordHash, QCryptographicHash::Sha256);
-        qDebug() << "passwordhash: " << newUserObject._passwordHash;
 
         // this is done quite primitively, but there's nothing wrong, even more efficient than an extra loop! LMAOooo
         QModelIndex index = this->_userModel->index(0, 0, QModelIndex());
@@ -133,7 +131,6 @@ void CentralWidget::addAccount(User &newUserObject){
 
         index = _userModel->index(0, 9, QModelIndex());
         this->_userModel->setData(index, newUserObject._DOB);
-        qDebug() << "DOB before savetoFile: " << newUserObject._DOB;
 
         index = _userModel->index(0, 10, QModelIndex());
         this->_userModel->setData(index, newUserObject._visaNumber);
@@ -143,12 +140,12 @@ void CentralWidget::addAccount(User &newUserObject){
 
         index = _userModel->index(0, 12, QModelIndex());
         this->_userModel->setData(index, newUserObject._CVV);
-//    }
-//    else{
-//        QMessageBox::information(this, QString("Duplicate"),
-//                   tr("The name \"%1\" already exists.").arg(newUserObject._userName));
-//    }
-    qDebug() << "now there are "<< _userModel->getUsers().size() << " users ";
+    }
+    else{
+        QMessageBox::information(this, QString("Duplicate"),
+                   tr("The name \"%1\" already exists.").arg(newUserObject._userName));
+    }
+    qDebug() << "now there are "<< _userModel->getUsers().size() << " users in database";
     saveToFile();
 }
 
@@ -173,7 +170,7 @@ QString CentralWidget::genAccountID() const{
 QByteArray CentralWidget::toHash(QString stringToHash, QCryptographicHash::Algorithm algorithm) const{
     QCryptographicHash cryptoObject(algorithm);
     cryptoObject.addData(stringToHash.toLatin1());    // alternative QString::toUTF8 toLocal8Bit
-    qDebug() << "toHash() returns " << cryptoObject.result().toHex();
+
     return cryptoObject.result().toHex();
 }
 
@@ -228,6 +225,8 @@ void CentralWidget::saveToFile(){
         QTextStream outStream(&file);
         outStream<<this->_userModel->getUsers();
 
+        qDebug() << "database written to file.";
+
         file.close();
 }
 
@@ -245,17 +244,7 @@ void CentralWidget::loadFromFile(){
        }
 
        QTextStream inStream(&file);
-
        inStream >> _userModel->getUsersAddress();
-       qDebug() << "Loaded database has size: " << _userModel->getUsers().size();
-       qDebug() << "first loaded user has id: " << _userModel->getUsers().at(0)._accountID;
-       qDebug() << "first loaded user has userName: " << _userModel->getUsers().at(0)._userName;
-       qDebug() << "first loaded user has PasswordHash: " << _userModel->getUsers().at(0)._passwordHash;
-       qDebug() << "first loaded user has firstname: " << _userModel->getUsers().at(0)._firstName;
-       qDebug() << "first loaded user has lastname: " << _userModel->getUsers().at(0)._lastName;
-       qDebug() << "first loaded user has dob: " << _userModel->getUsers().at(0)._DOB.toString("yyyy.MM.dd");
-       qDebug() << "first loaded user has ismale: " << _userModel->getUsers().at(0)._isMale;
 
-       // this is complete success
        file.close();
 }

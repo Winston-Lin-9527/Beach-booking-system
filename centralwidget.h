@@ -2,6 +2,7 @@
 #define CENTRALWIDGET_H
 
 #include "usermodel.h"
+#include "bookingwindow.h"
 
 #include <QWidget>
 #include <QCryptographicHash>
@@ -49,6 +50,8 @@ private:
     QStackedWidget *_stackedWindows;
     QWidget *_introPageObject;
     QWidget *_bookingPageObject;
+
+    BookingWindow *_bookingWindow;
 
     QHBoxLayout *_introLayout;
     QGridLayout *_bookingLayout;

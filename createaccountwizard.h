@@ -102,8 +102,6 @@ private:
     QDateEdit *_visaExpiryDate_DateEdit;
     QLineEdit *_visaCVV_LineEdit;
 
-    QIcon *_visaIcon;
-
     QLabel *_visaCardNumberLabel;
     QLabel *_visaExpiryDateLabel;
     QLabel *_visaCVVLabel;

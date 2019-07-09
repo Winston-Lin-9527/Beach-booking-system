@@ -23,16 +23,18 @@ struct User{
     QString _CVV;               //13        *13 fields
 
     int operator== (const User &other) const {
-        if((_userName == other._userName) || (_email == other._email))
-            return 0;    // accountID and username and email subject to duplicate
-            // need to make this returns the different cases, duplicate username or duplicate email or duplicate visa...etc
-        }
+        if(_userName == other._userName)
+            return 1;    // things like account ID and username are subject to duplicate
+        else if((_email == other._email))
+            return 2;
+        else                // make more cases
+            return 0;
+    }
     // bool operator overloaded as non-member to check if another User object is equal to this one
 };
 
 // overload these two operators ( << and >> ) to help format input and output of an User object's fields
 // the inline are very important, if no online keyword then duplicate symbol error will occur.
-
 inline QTextStream &operator<< (QTextStream &out, User &user){
        out << user._accountID<<endl;
        out << user._userName<<endl;
@@ -75,7 +77,7 @@ inline QTextStream &operator>> (QTextStream &in, User *user){
 }
 
 inline QTextStream &operator<< (QTextStream &out, const QList<User> &users){
-    out << users.size() << endl;
+    out << users.size() << endl;    // this is an index used to record the number of user saved
 
     for(int i = 0; i < users.size(); i++){
             User user = users.at(i);
@@ -86,16 +88,15 @@ inline QTextStream &operator<< (QTextStream &out, const QList<User> &users){
 
 inline QTextStream &operator>> (QTextStream &in, QList<User> *users){
     int count = 0;
-    in >> count;
+    in >> count;        // records how the number of users, works alongside with first line in operator <<
 
-    for(int i = 0; i < count; i++)
-        {
+    for(int i = 0; i < count; i++){
             User *user = new User;
             in >> user;
             users->push_back(*user);
-        }
+    }
 
-        return in;
+    return in;
 }
 
 class UserModel : public QAbstractItemModel

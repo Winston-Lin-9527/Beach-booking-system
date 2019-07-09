@@ -23,10 +23,10 @@ CreateAccountWizard::CreateAccountWizard()
     this->setPage(Page_Payment, new PaymentSettingPage);
     this->setPage(Page_Summary, new SummaryPage);
 
-    this->setStartId(Page_Intro);
+    this->setStartId(Page_Payment);
 
     this->setOption(HaveHelpButton, true);
-    setPixmap(QWizard::LogoPixmap, QPixmap("logo.png"));
+    setPixmap(QWizard::LogoPixmap, QPixmap(":/resources/visaicon.png"));
 
     connect(this, &QWizard::helpRequested, this, &CreateAccountWizard::displayHelp);
 }
@@ -227,6 +227,7 @@ PaymentSettingPage::PaymentSettingPage():QWizardPage(nullptr){
 
     _visaCardNumber_LineEdit = new QLineEdit;
     _visaCardNumber_LineEdit->setMaxLength(16);     // standard VISA card number length
+    _visaCardNumber_LineEdit->setPlaceholderText("Your Visa number");
 
     _visaExpiryDate_DateEdit = new QDateEdit;
 
@@ -234,9 +235,10 @@ PaymentSettingPage::PaymentSettingPage():QWizardPage(nullptr){
     _visaCVV_LineEdit->setMaximumWidth(30);
     _visaCVV_LineEdit->setMaxLength(3);             // CVV has 3 digits only
 
-    _visaIcon = new QIcon("visaIcon.png");
-
+    QPixmap visaIcon(":/resources/visaicon.png");
     _visaCardNumberLabel = new QLabel("Visa card Number: ");
+    _visaCardNumberLabel->setPixmap(visaIcon.scaled(80, 80, Qt::KeepAspectRatio));
+
     _visaExpiryDateLabel = new QLabel("Visa expiry date: ");
     _visaCVVLabel = new QLabel("CVV: ");
 

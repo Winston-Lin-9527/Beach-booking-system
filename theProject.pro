@@ -22,7 +22,7 @@ SOURCES += \
     centralwidget.cpp \
     createaccountwizard.cpp \
     logindialog.cpp \
-    shopwindow.cpp
+    bookingwindow.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -35,5 +35,8 @@ HEADERS += \
     centralwidget.h \
     createaccountwizard.h \
     logindialog.h \
-    shopwindow.h \
-    globals.h
+    globals.h \
+    bookingwindow.h
+
+RESOURCES += \
+    resources.qrc
