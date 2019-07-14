@@ -22,14 +22,14 @@ private:
 
     QTabWidget *_itemTabWidget;
 
-    QVBoxLayout *_subFirstPageVLayout;      // to layout the top left label
-    QVBoxLayout *_subSecondPageVLayout;
-
     QLabel *_labelCategoryOne;
     QLabel *_labelCategoryTwo;
 
     QScrollArea *_categoryOneScrollArea;
     QScrollArea *_categoryTwoScrollArea;
+    QScrollArea *_categoryThreeScrollArea;
+    QScrollArea *_categoryFourScrollArea;
+    QScrollArea *_categoryFiveScrollArea;
 
     QWidget *_firstPage;
     QWidget *_secondPage;

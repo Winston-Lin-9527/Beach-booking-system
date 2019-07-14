@@ -1,5 +1,3 @@
-#include "logindialog.h"
-
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QObject>
@@ -7,6 +5,9 @@
 #include <QLabel>
 #include <QDebug>
 #include <QMessageBox>
+
+#include "logindialog.h"
+
 
 LoginDialog::LoginDialog() : QDialog()
 {

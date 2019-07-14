@@ -13,6 +13,7 @@
 #include "usermodel.h"
 #include "globals.h"
 
+
 CreateAccountWizard::CreateAccountWizard()
 {
     this->setWindowTitle("Account creation wizard");

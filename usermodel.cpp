@@ -1,10 +1,9 @@
-#include "usermodel.h"
-
 #include <QDate>
 
-UserModel::UserModel(QObject *parent):QAbstractItemModel(parent)
-{
-}
+#include "usermodel.h"
+
+
+UserModel::UserModel(QObject *parent):QAbstractItemModel(parent){ }
 
 int UserModel::rowCount(const QModelIndex &index) const{
     Q_UNUSED(index)
