@@ -7,6 +7,7 @@
 #include <QGridLayout>
 #include <QScrollArea>
 #include <QLabel>
+#include <QPushButton>
 
 class BookingWindow : public QWidget
 {
@@ -33,9 +34,17 @@ private:
 
     QWidget *_firstPage;
     QWidget *_secondPage;
+    QWidget *_thirdPage;
+    QWidget *_fourthPage;
+    QWidget *_fifthPage;
+
+    QPushButton *_backButton;
 
     QGridLayout *_itemDisplayGridLayout_CategoryOne;
     QGridLayout *_itemDisplayGridLayout_CategoryTwo;
+    QGridLayout *_itemDisplayGridLayout_CategoryThree;
+    QGridLayout *_itemDisplayGridLayout_CategoryFour;
+    QGridLayout *_itemDisplayGridLayout_CategoryFive;
 };
 
 #endif // BOOKINGWINDOW_H

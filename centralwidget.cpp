@@ -41,7 +41,7 @@ CentralWidget::CentralWidget(QWidget *parent)
     _bookingButton = new QPushButton("Make New Bookings");
     _loginAccountButton = new QPushButton("Login");
 
-    // elements of the booking page
+    // booking page
     _bookingWindow = new BookingWindow();
 
     // first page

@@ -1,5 +1,3 @@
-#include <QDate>
-
 #include "usermodel.h"
 
 

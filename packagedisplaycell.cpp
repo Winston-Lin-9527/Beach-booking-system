@@ -9,7 +9,7 @@ PackageDisplayCell::PackageDisplayCell(int ID, QString packageName, QString pack
     this->_packageID = ID;
     this->_packageName = new QLabel(packageName);
     this->_packageBanner = new QLabel;
-    _packageBanner->resize(100, 100);   // standard dimensions of a banner
+    _packageBanner->resize(200, 200);   // standard dimensions of a banner
     this->_bookButton = new QPushButton("Book");
 
     QImage bannerImage(packageBannerPath);

@@ -236,7 +236,7 @@ PaymentSettingPage::PaymentSettingPage():QWizardPage(nullptr){
     _visaCVV_LineEdit->setMaximumWidth(30);
     _visaCVV_LineEdit->setMaxLength(3);             // CVV has 3 digits only
 
-    QPixmap visaIcon(":/resources/visaicon.png");
+    QPixmap visaIcon(":/resources/images/visa_icon.png");
     _visaCardNumberLabel = new QLabel("Visa card Number: ");
     _visaCardNumberLabel->setPixmap(visaIcon.scaled(80, 80, Qt::KeepAspectRatio));
 

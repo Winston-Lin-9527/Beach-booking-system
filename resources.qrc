@@ -1,5 +1,15 @@
 <RCC>
     <qresource prefix="/resources">
-        <file>visaicon.png</file>
+        <file>images/surfing.png</file>
+        <file>images/visa_icon.png</file>
+        <file>images/kitesurfing.png</file>
+        <file>images/sailing.png</file>
+        <file>images/dinghie.png</file>
+        <file>images/keelboat.png</file>
+        <file>images/multihulls.jpg</file>
+        <file>images/paddleboarding.jpg</file>
+        <file>images/deepdiving.jpg</file>
+        <file>images/scuba.jpg</file>
+        <file>images/snorkel.jpg</file>
     </qresource>
 </RCC>
