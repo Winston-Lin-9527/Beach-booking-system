@@ -24,7 +24,7 @@ CreateAccountWizard::CreateAccountWizard()
     this->setPage(Page_Payment, new PaymentSettingPage);
     this->setPage(Page_Summary, new SummaryPage);
 
-    this->setStartId(Page_Payment);
+    this->setStartId(Page_Intro);
 
     this->setOption(HaveHelpButton, true);
     setPixmap(QWizard::LogoPixmap, QPixmap(":/resources/visaicon.png"));

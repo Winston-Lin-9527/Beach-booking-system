@@ -20,7 +20,7 @@ CentralWidget::CentralWidget(QWidget *parent)
     _userModel = new UserModel(this);
     _isCurrentlyLogin = false;
     _currentSessionUserID = "";
-    _userFileDirectory = "userBase.txt";    // by default the file storing is userBase.txt, this allows for customization
+    _userFileDirectory = "userBase.txt";    // by default the file storing is userBase.txt, but customization is ok
 
     // dialogs
     _createAccountWizard = new CreateAccountWizard;
@@ -28,8 +28,8 @@ CentralWidget::CentralWidget(QWidget *parent)
 
     // layouts structures
     _mainLayout = new QHBoxLayout(this);
-    _introLayout = new QHBoxLayout(this);
-    _bookingLayout = new QGridLayout(this);
+    _introLayout = new QVBoxLayout(this);
+    _bookingLayout = new QHBoxLayout(this);
 
     _introPageObject = new QWidget(this);
     _bookingPageObject = new QWidget(this);
@@ -47,15 +47,15 @@ CentralWidget::CentralWidget(QWidget *parent)
     // first page
     this->_introLayout->setMargin(5);
     _introLayout->addWidget(_welcomeLabel);
-    _introLayout->addWidget(_createAccountButton);
-    _introLayout->addWidget(_bookingButton);
     _introLayout->addWidget(_loginAccountButton);
+    _introLayout->addWidget(_bookingButton);
+    _introLayout->addWidget(_createAccountButton);
     _introPageObject->setLayout(_introLayout);
 
     // second page
-    this->_bookingLayout = new QGridLayout(this);
+    this->_bookingLayout = new QHBoxLayout(this);
     _bookingLayout->setSpacing(10);
-    _bookingLayout->addWidget(_bookingWindow, 0, 0);
+    _bookingLayout->addWidget(_bookingWindow);
     _bookingPageObject->setLayout(_bookingLayout);
 
     /*
@@ -74,6 +74,7 @@ CentralWidget::CentralWidget(QWidget *parent)
     connect(_createAccountWizard->page(4), SIGNAL(sendDetails(User&)), this, SLOT(addAccount(User&)));
     connect(_loginAccountButton, SIGNAL(clicked()), _loginDialog, SLOT(exec()));
     connect(_loginDialog, SIGNAL(requestLogin(QString, QString)), this, SLOT(loginRequested(QString, QString)));
+    connect(_bookingWindow, SIGNAL(signalBackToHomePage()), this, SLOT(backToHomePage()));
 }
 
 CentralWidget::~CentralWidget(){}
@@ -84,7 +85,14 @@ void CentralWidget::createAccountButtonClicked(){
 }
 
 void CentralWidget::bookingButtonClicked(){
-    _stackedWindows->setCurrentIndex(1);
+    if(this->_isCurrentlyLogin)
+        _stackedWindows->setCurrentIndex(1);
+    else
+        QMessageBox::information(this, "Warning", "Please login first.");
+}
+
+void CentralWidget::backToHomePage(){
+    _stackedWindows->setCurrentIndex(0);
 }
 
 void CentralWidget::addAccount(User &newUserObject){

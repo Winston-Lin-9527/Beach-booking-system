@@ -33,6 +33,7 @@ public:
 public slots:
     void createAccountButtonClicked();
     void bookingButtonClicked();
+    void backToHomePage();
 
     void addAccount(User &user);
     void loginRequested(QString username, QString passwordInPlainText);
@@ -53,8 +54,8 @@ private:
 
     BookingWindow *_bookingWindow;
 
-    QHBoxLayout *_introLayout;
-    QGridLayout *_bookingLayout;
+    QVBoxLayout *_introLayout;
+    QHBoxLayout *_bookingLayout;
 
     CreateAccountWizard *_createAccountWizard;
     LoginDialog *_loginDialog;

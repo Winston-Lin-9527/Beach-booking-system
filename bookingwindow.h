@@ -16,6 +16,12 @@ class BookingWindow : public QWidget
 public:
     BookingWindow();
 
+signals:
+    void signalBackToHomePage();
+
+private slots:
+    void backButtonClicked();
+
 private:
     // the widgets listed are in top down order
 

@@ -23,8 +23,8 @@ BookingWindow::BookingWindow()
     this->_itemDisplayGridLayout_CategoryFour = new QGridLayout;
     this->_itemDisplayGridLayout_CategoryFive = new QGridLayout;
 
-    this->_backButton = new QPushButton;
-    _backButton->setStyleSheet("border: 1px solid black; background: white");
+    this->_backButton = new QPushButton("Back");
+    _backButton->setMaximumWidth(100);
 
     // initialize the package cells
     // first category
@@ -90,4 +90,10 @@ BookingWindow::BookingWindow()
     _mLayout->addWidget(_itemTabWidget);
 
     setLayout(_mLayout);
+
+    connect(_backButton, SIGNAL(clicked()), this, SLOT(backButtonClicked()));
+}
+
+void BookingWindow::backButtonClicked(){
+    emit signalBackToHomePage();
 }
