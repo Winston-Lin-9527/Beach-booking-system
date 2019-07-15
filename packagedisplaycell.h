@@ -15,7 +15,7 @@ class PackageDisplayCell : public QFrame
 {
 public:
     PackageDisplayCell();
-    PackageDisplayCell(int ID, QString packageName, QString packageBannerPath, SportKindOnTide kind);
+    PackageDisplayCell(int ID, QString packageName, QString packageBannerPath);
 
 private:
     int _packageID;
@@ -25,8 +25,6 @@ private:
 //    QLabel *_packageDescription;  not going to include a description in such small view
 
     QPushButton *_bookButton;
-
-    SportKindOnTide _compatibleTideKind;
 };
 
 #endif // PACKAGEDISPLAYCELL_H

@@ -23,7 +23,8 @@ SOURCES += \
     createaccountwizard.cpp \
     logindialog.cpp \
     bookingwindow.cpp \
-    packagedisplaycell.cpp
+    packagedisplaycell.cpp \
+    bookingdatabase.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -38,7 +39,8 @@ HEADERS += \
     logindialog.h \
     globals.h \
     bookingwindow.h \
-    packagedisplaycell.h
+    packagedisplaycell.h \
+    bookingdatabase.h
 
 RESOURCES += \
     resources.qrc

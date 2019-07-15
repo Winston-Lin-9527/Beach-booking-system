@@ -4,5 +4,5 @@ MainWindow::MainWindow()
 {
     this->_centralWidget = new CentralWidget;
     setCentralWidget(_centralWidget);
-    setWindowTitle("Bitch sport Booking");
+    setWindowTitle("Beach sport Booking");
 }

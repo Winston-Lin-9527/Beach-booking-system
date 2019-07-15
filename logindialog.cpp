@@ -24,6 +24,7 @@ LoginDialog::LoginDialog() : QDialog()
 
     _lineEditPasswordLabel = new QLabel("Password: ");
     _lineEditPassword->setPlaceholderText("");
+    _lineEditPassword->setEchoMode(QLineEdit::Password);
     _lineEditPassword->setMaxLength(GLOBALS_PASSWORD_MAX_CHARACTER);
 
     _mainLayout = new QVBoxLayout;

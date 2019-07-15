@@ -28,25 +28,25 @@ BookingWindow::BookingWindow()
 
     // initialize the package cells
     // first category
-    PackageDisplayCell *cell1 = new PackageDisplayCell(1, "Surfing", ":/resources/images/surfing.png", SportKindOnTide::HIGH_TIDE);
-    PackageDisplayCell *cell2 = new PackageDisplayCell(2, "Kite Surfing", ":/resources/images/kitesurfing.png", SportKindOnTide::HIGH_TIDE);
+    PackageDisplayCell *cell1 = new PackageDisplayCell(1, "Surfing", ":/resources/images/surfing.png");
+    PackageDisplayCell *cell2 = new PackageDisplayCell(2, "Kite Surfing", ":/resources/images/kitesurfing.png");
 
     // second category..
-    PackageDisplayCell *cell3 = new PackageDisplayCell(3, "Dinghie", ":/resources/images/dinghie.png", SportKindOnTide::HIGH_TIDE);
-    PackageDisplayCell *cell4 = new PackageDisplayCell(4, "Keelboats & yachts", ":/resources/images/keelboat.png", SportKindOnTide::HIGH_TIDE);
-    PackageDisplayCell *cell5 = new PackageDisplayCell(5, "Multi-hulls", ":/resources/images/multihulls.jpg", SportKindOnTide::HIGH_TIDE);
-    PackageDisplayCell *cell6 = new PackageDisplayCell(6, "Board-sailing", ":/resources/images/sailing.png", SportKindOnTide::HIGH_TIDE);
+    PackageDisplayCell *cell3 = new PackageDisplayCell(3, "Dinghie", ":/resources/images/dinghie.png");
+    PackageDisplayCell *cell4 = new PackageDisplayCell(4, "Keelboats & yachts", ":/resources/images/keelboat.png");
+    PackageDisplayCell *cell5 = new PackageDisplayCell(5, "Multi-hulls", ":/resources/images/multihulls.jpg");
+    PackageDisplayCell *cell6 = new PackageDisplayCell(6, "Board-sailing", ":/resources/images/sailing.png");
 
     // third category
-    PackageDisplayCell *cell7 = new PackageDisplayCell(7, "Paddle boarding", ":/resources/images/snorkel.jpg", SportKindOnTide::HIGH_TIDE);
-    PackageDisplayCell *cell8 = new PackageDisplayCell(8, "Sea Kayaking", ":/resources/images/snorkel.jpg", SportKindOnTide::HIGH_TIDE);
+    PackageDisplayCell *cell7 = new PackageDisplayCell(7, "Paddle boarding", ":/resources/images/paddleboarding.jpg");
+    PackageDisplayCell *cell8 = new PackageDisplayCell(8, "Sea Kayaking", ":/resources/images/seakayaking.jpg");
 
     // fourth category
-    PackageDisplayCell *cell9 = new PackageDisplayCell(10, "Snorkeling", ":/resources/images/snorkel.jpg", SportKindOnTide::HIGH_TIDE);
-    PackageDisplayCell *cell10 = new PackageDisplayCell(11, "Scuba diving", ":/resources/images/scuba", SportKindOnTide::HIGH_TIDE);
-    PackageDisplayCell *cell11 = new PackageDisplayCell(12, "Deep sea diving", ":/resources/images/deepdiving.jpg", SportKindOnTide::HIGH_TIDE);
+    PackageDisplayCell *cell9 = new PackageDisplayCell(9, "Snorkeling", ":/resources/images/snorkel.jpg");
+    PackageDisplayCell *cell10 = new PackageDisplayCell(10, "Scuba diving", ":/resources/images/scuba");
+    PackageDisplayCell *cell11 = new PackageDisplayCell(11, "Deep sea diving", ":/resources/images/deepdiving.jpg");
 
-    // add staffs to the two pages now
+    // add extra staffs to the pages
     this->_labelCategoryOne = new QLabel("Lets buy some sailing gears");
     this->_labelCategoryTwo = new QLabel("Lets buy some swimming gears");
 
@@ -60,8 +60,8 @@ BookingWindow::BookingWindow()
     _itemDisplayGridLayout_CategoryTwo->addWidget(cell5, 1, 0);
     _itemDisplayGridLayout_CategoryTwo->addWidget(cell6, 1, 1);
 
-    _itemDisplayGridLayout_CategoryThree->addWidget(cell3, 0, 0);
-    _itemDisplayGridLayout_CategoryThree->addWidget(cell4, 0, 1);
+    _itemDisplayGridLayout_CategoryThree->addWidget(cell7, 0, 0);
+    _itemDisplayGridLayout_CategoryThree->addWidget(cell8, 0, 1);
 
     _itemDisplayGridLayout_CategoryFour->addWidget(cell9, 0, 0);
     _itemDisplayGridLayout_CategoryFour->addWidget(cell10, 0, 1);

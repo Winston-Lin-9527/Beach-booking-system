@@ -5,7 +5,7 @@
 
 PackageDisplayCell::PackageDisplayCell(){ }
 
-PackageDisplayCell::PackageDisplayCell(int ID, QString packageName, QString packageBannerPath, SportKindOnTide kind){
+PackageDisplayCell::PackageDisplayCell(int ID, QString packageName, QString packageBannerPath){
     this->_packageID = ID;
     this->_packageName = new QLabel(packageName);
     this->_packageBanner = new QLabel;
