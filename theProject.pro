@@ -1,5 +1,6 @@
 QT -= gui
 QT += widgets
+QT += sql
 
 CONFIG += c++11 console
 CONFIG -= app_bundle
@@ -40,7 +41,8 @@ HEADERS += \
     globals.h \
     bookingwindow.h \
     packagedisplaycell.h \
-    bookingdatabase.h
+    bookingdatabase.h \
+    connection.h
 
 RESOURCES += \
     resources.qrc
