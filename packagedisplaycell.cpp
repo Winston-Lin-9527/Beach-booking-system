@@ -27,5 +27,14 @@ PackageDisplayCell::PackageDisplayCell(int ID, QString packageName, QString pack
 
     this->setFrameStyle( QFrame::Panel | QFrame::Raised );
     this->setLayout(layout);
+
+    connect(_bookButton, SIGNAL(clicked()), this, SLOT(bookButtonClicked()));
 }
 
+void PackageDisplayCell::bookButtonClicked(){
+    emit clickedSignal();
+}
+
+int PackageDisplayCell::ID() const{
+    return _packageID;
+}

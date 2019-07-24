@@ -7,10 +7,18 @@
 
 class PackageDisplayCell : public QFrame
 {
+    Q_OBJECT
+
 public:
     PackageDisplayCell();
     PackageDisplayCell(int ID, QString packageName, QString packageBannerPath);
+    int ID() const;
 
+signals:
+    void clickedSignal();
+
+private slots:
+    void bookButtonClicked();
 private:
     int _packageID;
 

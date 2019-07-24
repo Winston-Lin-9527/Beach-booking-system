@@ -9,6 +9,9 @@
 #include <QLabel>
 #include <QPushButton>
 
+#include <itembookingform.h>
+
+
 class BookingWindow : public QWidget
 {
     Q_OBJECT
@@ -21,6 +24,7 @@ signals:
 
 private slots:
     void backButtonClicked();
+    void showBookingForm();
 
 private:
     // the widgets listed are in top down order
@@ -51,6 +55,20 @@ private:
     QGridLayout *_itemDisplayGridLayout_CategoryThree;
     QGridLayout *_itemDisplayGridLayout_CategoryFour;
     QGridLayout *_itemDisplayGridLayout_CategoryFive;
+
+    // this is so f-cking ugly, ewwww
+    // but if use elegant way there are issues with copy contructor and overload resolution
+    ItemBookingForm form1;
+    ItemBookingForm form2;
+    ItemBookingForm form3;
+    ItemBookingForm form4;
+    ItemBookingForm form5;
+    ItemBookingForm form6;
+    ItemBookingForm form7;
+    ItemBookingForm form8;
+    ItemBookingForm form9;
+    ItemBookingForm form10;
+    ItemBookingForm form11;
 };
 
 #endif // BOOKINGWINDOW_H

@@ -21,7 +21,7 @@ void BookingDatabase::insertEntry(Booking bookingObject){
     query.bindValue(":customerID", bookingObject.customerID);
     query.bindValue(":productID", bookingObject.productID);
     query.bindValue(":startTime", bookingObject.startTime.toString("H:m:s"));
-    query.bindValue("endTime", bookingObject.endTime.toString("H:m:s"));
+    query.bindValue(":endTime", bookingObject.endTime.toString("H:m:s"));
     query.bindValue(":duration30mins", (bookingObject.duration30mins == true) ? 1 : 0);
 
     if(!query.exec()){

@@ -1,5 +1,9 @@
+#include <QtDebug>
+
 #include "bookingwindow.h"
 #include "packagedisplaycell.h"
+
+int ItemBookingForm::_counter = 1;
 
 BookingWindow::BookingWindow()
 {
@@ -43,7 +47,7 @@ BookingWindow::BookingWindow()
 
     // fourth category
     PackageDisplayCell *cell9 = new PackageDisplayCell(9, "Snorkeling", ":/resources/images/snorkel.jpg");
-    PackageDisplayCell *cell10 = new PackageDisplayCell(10, "Scuba diving", ":/resources/images/scuba");
+    PackageDisplayCell *cell10 = new PackageDisplayCell(10, "Scuba diving", ":/resources/images/scuba.jpg");
     PackageDisplayCell *cell11 = new PackageDisplayCell(11, "Deep sea diving", ":/resources/images/deepdiving.jpg");
 
     // add extra staffs to the pages
@@ -91,9 +95,71 @@ BookingWindow::BookingWindow()
 
     setLayout(_mLayout);
 
+    // todo connect clicks to display bookingForms
+    connect(cell1, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
+    connect(cell2, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
+    connect(cell3, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
+    connect(cell4, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
+    connect(cell5, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
+    connect(cell6, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
+    connect(cell7, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
+    connect(cell8, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
+    connect(cell9, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
+    connect(cell10, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
+    connect(cell11, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
+
     connect(_backButton, SIGNAL(clicked()), this, SLOT(backButtonClicked()));
 }
 
 void BookingWindow::backButtonClicked(){
     emit signalBackToHomePage();
+}
+
+void BookingWindow::showBookingForm(){
+    qDebug() << "BookingWindow::showBookingForm() called";
+
+    /* find out the sender of the signal using sender(), this function returns the sender as QObject*
+    /  since we know the sender is an ItemBookingForm object, it is safe to cast the QObject* into its derived class
+    /  being defensive using qobject_cast, if casting fails, a null pointer is returned
+    */
+    PackageDisplayCell *triggeredCell = qobject_cast<PackageDisplayCell *>(sender());
+
+    int ID = triggeredCell->ID();
+    switch(ID){
+    case 1:
+        form1.exec();
+        break;
+    case 2:
+        form2.exec();
+        break;
+    case 3:
+        form3.exec();
+        break;
+    case 4:
+        form4.exec();
+        break;
+    case 5:
+        form5.exec();
+        break;
+    case 6:
+        form6.exec();
+        break;
+    case 7:
+        form7.exec();
+        break;
+    case 8:
+        form8.exec();
+        break;
+    case 9:
+        form9.exec();
+        break;
+    case 10:
+        form10.exec();
+        break;
+    case 11:
+        form11.exec();
+        break;
+    default:
+        qDebug() << "what's happening?";
+    }
 }
