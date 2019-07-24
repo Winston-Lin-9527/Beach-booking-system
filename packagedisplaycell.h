@@ -5,12 +5,6 @@
 #include <QString>
 #include <QPushButton>
 
-enum SportKindOnTide{
-    LOW_TIDE,
-    MEDIUM_TIDE,
-    HIGH_TIDE
-};
-
 class PackageDisplayCell : public QFrame
 {
 public:
