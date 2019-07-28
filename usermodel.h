@@ -27,7 +27,7 @@ struct User{
             return 1;    // things like account ID and username are subject to duplicate
         else if((_email == other._email))
             return 2;
-        else                // make more cases
+        else                // todo: make more cases
             return 0;
     }
     // bool operator overloaded as non-member to check if another User object is equal to this one

@@ -20,7 +20,7 @@ CentralWidget::CentralWidget(QWidget *parent)
     _userModel = new UserModel(this);
     _isCurrentlyLogin = false;
     _currentSessionUserID = "";
-    _userFileDirectory = "userBase.txt";    // by default the file storing is userBase.txt, but customization is ok
+    _userFileDirectory = "userBase.sqlite";    // by default the file storing is userBase.txt, but customization is ok
 
     // dialogs
     _createAccountWizard = new CreateAccountWizard;
@@ -34,8 +34,23 @@ CentralWidget::CentralWidget(QWidget *parent)
     _introPageObject = new QWidget(this);
     _bookingPageObject = new QWidget(this);
 
-    // elements of the first page
-    _welcomeLabel = new QLabel("this is the beach sport renting system");
+    // elements in the first page
+    _welcomeLabel = new QLabel("Welcome To The Beach Sport Renting System");
+    QFont font;
+    font.setBold(true);
+    font.setPointSize(25);
+    _welcomeLabel->setFont(font);
+
+    _welcomeLabelBanner = new QLabel;
+    QImage bannerImage(":/resources/images/mainBanner.jpg");
+    QPixmap bannerPixmap = QPixmap::fromImage(bannerImage);
+    QPixmap processedPixmap = bannerPixmap.scaled(_welcomeLabel->size(), Qt::KeepAspectRatio);
+    _welcomeLabelBanner->setPixmap(processedPixmap);
+
+    QVBoxLayout *welcomeLayout = new QVBoxLayout;
+    welcomeLayout->addWidget(_welcomeLabel);
+    welcomeLayout->addWidget(_welcomeLabelBanner);
+    welcomeLayout->setContentsMargins(0, 5, 0, 80);
 
     _createAccountButton = new QPushButton("create account");
     _bookingButton = new QPushButton("Make New Bookings");
@@ -46,7 +61,7 @@ CentralWidget::CentralWidget(QWidget *parent)
 
     // first page
     this->_introLayout->setMargin(5);
-    _introLayout->addWidget(_welcomeLabel);
+    _introLayout->addLayout(welcomeLayout);
     _introLayout->addWidget(_loginAccountButton);
     _introLayout->addWidget(_bookingButton);
     _introLayout->addWidget(_createAccountButton);
@@ -85,8 +100,10 @@ void CentralWidget::createAccountButtonClicked(){
 }
 
 void CentralWidget::bookingButtonClicked(){
-    if(this->_isCurrentlyLogin)
+    if(this->_isCurrentlyLogin){
         _stackedWindows->setCurrentIndex(1);
+        _bookingWindow->setCustomerID(_currentSessionUserID);
+    }
     else
         QMessageBox::information(this, "Warning", "Please login first.");
 }
@@ -239,13 +256,9 @@ void CentralWidget::saveToFile(){
 }
 
 void CentralWidget::loadFromFile(){
-//    QString fileName = QFileDialog::getSaveFileName(this,
-//           tr("Save Address Book"), "",
-//           tr("Address Book (*.abk);;All Files (*)"));
-
     QFile file(this->_userFileDirectory);
 
-       if (!file.open(QIODevice::ReadOnly)) {
+       if (!file.open(QIODevice::ReadWrite)) {
            QMessageBox::information(this, tr("Warning"),
                "Couldn't find database in directory, now creating new one.");
            return;

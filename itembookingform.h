@@ -4,13 +4,16 @@
 #include <QDialog>
 
 class QPushButton;
+class QButtonGroup;
 class QLabel;
 class QHBoxLayout;
 class QVBoxLayout;
 class QGroupBox;
 class QCheckBox;
-class QDateTimeEdit;
+class QDateEdit;
+class QTimeEdit;
 class QComboBox;
+class databasehandler;
 
 class ItemBookingForm : public QDialog
 {
@@ -18,10 +21,12 @@ class ItemBookingForm : public QDialog
 
 public:
     ItemBookingForm();
+    void setCustomerID(QString ID);
 
     static int _counter;
 
 private slots:
+    void handleConfirmButtonClick();
     // todo: handle two checkBoxes, need to be opposite
 
 private:
@@ -29,11 +34,13 @@ private:
     QVBoxLayout *_rightLayout;
 
     QVBoxLayout *_durationButtonLayout;
+    QButtonGroup *_hourButtonGroup;
     QCheckBox *_30minsCheckBox;
     QCheckBox *_60minsCheckBox;
 
     QHBoxLayout *_dateTimeEditLayout;
-    QDateTimeEdit *_dateTimeEdit;
+    QDateEdit *_dateEdit;
+    QTimeEdit *_timeEdit;
 
     QHBoxLayout *_quantityEditLayout;
     QComboBox *_quantityComboBox;
@@ -47,6 +54,7 @@ private:
     QLabel *_productBanner;
 
     int _productID;
+    QString _customerID;
 };
 
 #endif // ITEMBOOKINGFORM_H

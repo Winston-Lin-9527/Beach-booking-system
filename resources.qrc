@@ -1,10 +1,7 @@
 <RCC>
     <qresource prefix="/resources">
-        <file>images/surfing.png</file>
         <file>images/visa_icon.png</file>
         <file>images/kitesurfing.png</file>
-        <file>images/sailing.png</file>
-        <file>images/dinghie.png</file>
         <file>images/keelboat.png</file>
         <file>images/multihulls.jpg</file>
         <file>images/paddleboarding.jpg</file>
@@ -12,5 +9,12 @@
         <file>images/scuba.jpg</file>
         <file>images/snorkel.jpg</file>
         <file>images/seakayaking.jpg</file>
+        <file>images/splashscreen.jpg</file>
+        <file>images/parasailing.jpg</file>
+        <file>images/skydive.jpg</file>
+        <file>images/surf.jpg</file>
+        <file>images/sailing.jpg</file>
+        <file>images/dinghie.jpg</file>
+        <file>images/mainBanner.jpg</file>
     </qresource>
 </RCC>

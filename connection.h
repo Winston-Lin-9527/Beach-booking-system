@@ -3,73 +3,51 @@
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QSqlError>
 #include <QMessageBox>
 #include <QDebug>
+#include <QFileInfo>
 
-static bool createConnection()
+static void createConnection()
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE"); // using default connection
-    db.setDatabaseName("bookingDatabase.db");
-//    db.setUserName("Stranger things season 3");
-//    db.setPassword("sucks!");
+    db.setDatabaseName("bookingDatabase.qsqlite");  // no subfix .db will create a new database file but will not work with existing file
 
-    if (!db.open()) {
-        QMessageBox::critical(nullptr, QObject::tr("Cannot open booking database"),
-            QObject::tr("Unable to establish a database connection.\n"), QMessageBox::Cancel);
-        return false;
-    } 
+    QFileInfo check_file("bookingDatabase.qsqlite");
+        // check if file exists and if yes: Is it really a file and no directory?
+        if (check_file.exists() && check_file.isFile()) {
+            if (!db.open()) {
+                QMessageBox::critical(nullptr, QObject::tr("Cannot open booking database"),
+                QObject::tr("Unable to establish a database connection.\n"), QMessageBox::Cancel);
+            }
 
-    QSqlQuery query(db);
-    QString create_table("CREATE TABLE bookings (id int primary key, "
-               "customerID varchar(6), productID int, startTime varchar(10), endTime varchar(10), duration30mins int)");
-    query.prepare(create_table);
+        } else {
+            // only called when no such file exist
+            qDebug()<< "Database directory not found, now creating new database file";
+            QSqlQuery query(db);
+            query.prepare("CREATE TABLE bookings (id int primary key, customerID varchar(6), productID int, startTime varchar(10), duration30mins int)");
 
-    if(!query.exec()){
-        qDebug() << "error: can't creating table in bookings database.";
-    }
+            if(!query.exec())
+                qDebug() <<"Failed to create new database table";
 
-//    query.exec("insert into person values(101, 'Danny', 'Young')");
-//    query.exec("insert into person values(102, 'Christine', 'Holand')");
-//    query.exec("insert into person values(103, 'Lars', 'Gordon')");
-//    query.exec("insert into person values(104, 'Roberto', 'Robitaille')");
-//    query.exec("insert into person values(105, 'Maria', 'Papadopoulos')");
+            query.prepare("INSERT INTO bookings VALUES(?, ?, ?, ?, ?)");
+            query.addBindValue(12);
+            query.addBindValue("696969");
+            query.addBindValue(8);
+            query.addBindValue("kmkmkm");
+            query.addBindValue(1);
 
-//    query.exec("create table items (id int primary key,"
-//                                             "imagefile int,"
-//                                             "itemtype varchar(20),"
-//                                             "description varchar(100))");
-//    query.exec("insert into items "
-//               "values(0, 0, 'Qt',"
-//               "'Qt is a full development framework with tools designed to "
-//               "streamline the creation of stunning applications and  "
-//               "amazing user interfaces for desktop, embedded and mobile "
-//               "platforms.')");
-//    query.exec("insert into items "
-//               "values(1, 1, 'Qt Quick',"
-//               "'Qt Quick is a collection of techniques designed to help "
-//               "developers create intuitive, modern-looking, and fluid "
-//               "user interfaces using a CSS & JavaScript like language.')");
-//    query.exec("insert into items "
-//               "values(2, 2, 'Qt Creator',"
-//               "'Qt Creator is a powerful cross-platform integrated "
-//               "development environment (IDE), including UI design tools "
-//               "and on-device debugging.')");
-//    query.exec("insert into items "
-//               "values(3, 3, 'Qt Project',"
-//               "'The Qt Project governs the open source development of Qt, "
-//               "allowing anyone wanting to contribute to join the effort "
-//               "through a meritocratic structure of approvers and "
-//               "maintainers.')");
+            if(!query.exec())
+                qDebug() << query.lastError();
+        }
 
-    return true;
+        QString ptrStr = QString("0x%1").arg((quintptr)&db, QT_POINTER_SIZE * 2, 16, QChar('0'));
+        qDebug()<< "created default database: " << ptrStr;
 }
 
 static void destroyConnection(){
-    // may not need for closing database, we'll see
-//    QSqlDatabase db = QSqlDatabase::database();
-//    db.close();
-
-    QSqlDatabase::removeDatabase(QSqlDatabase::defaultConnection);
+    // not needed because removeDatabase contains close()
+    QSqlDatabase::removeDatabase(QSqlDatabase::database().databaseName());
 }
 
 #endif // CONNECTION_H

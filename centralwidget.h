@@ -43,6 +43,8 @@ public slots:
 
 private:
     QLabel *_welcomeLabel;
+    QLabel *_welcomeLabelBanner;
+
     QPushButton *_bookingButton;
     QPushButton *_createAccountButton;
     QPushButton *_loginAccountButton;

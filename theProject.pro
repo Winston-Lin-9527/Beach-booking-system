@@ -25,8 +25,10 @@ SOURCES += \
     logindialog.cpp \
     bookingwindow.cpp \
     packagedisplaycell.cpp \
-    bookingdatabase.cpp \
-    itembookingform.cpp
+    itembookingform.cpp \
+    bookingdatabaseutils.cpp \
+    purchaseconfirmationdialog.cpp \
+    databasehandler.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -42,9 +44,11 @@ HEADERS += \
     globals.h \
     bookingwindow.h \
     packagedisplaycell.h \
-    bookingdatabase.h \
     connection.h \
-    itembookingform.h
+    itembookingform.h \
+    bookingdatabaseutils.h \
+    purchaseconfirmationdialog.h \
+    databasehandler.h
 
 RESOURCES += \
     resources.qrc

@@ -32,14 +32,14 @@ BookingWindow::BookingWindow()
 
     // initialize the package cells
     // first category
-    PackageDisplayCell *cell1 = new PackageDisplayCell(1, "Surfing", ":/resources/images/surfing.png");
+    PackageDisplayCell *cell1 = new PackageDisplayCell(1, "Surfing", ":/resources/images/surf.jpg");
     PackageDisplayCell *cell2 = new PackageDisplayCell(2, "Kite Surfing", ":/resources/images/kitesurfing.png");
 
     // second category..
-    PackageDisplayCell *cell3 = new PackageDisplayCell(3, "Dinghie", ":/resources/images/dinghie.png");
+    PackageDisplayCell *cell3 = new PackageDisplayCell(3, "Dinghie", ":/resources/images/dinghie.jpg");
     PackageDisplayCell *cell4 = new PackageDisplayCell(4, "Keelboats & yachts", ":/resources/images/keelboat.png");
     PackageDisplayCell *cell5 = new PackageDisplayCell(5, "Multi-hulls", ":/resources/images/multihulls.jpg");
-    PackageDisplayCell *cell6 = new PackageDisplayCell(6, "Board-sailing", ":/resources/images/sailing.png");
+    PackageDisplayCell *cell6 = new PackageDisplayCell(6, "Board-sailing", ":/resources/images/sailing.jpg");
 
     // third category
     PackageDisplayCell *cell7 = new PackageDisplayCell(7, "Paddle boarding", ":/resources/images/paddleboarding.jpg");
@@ -49,6 +49,10 @@ BookingWindow::BookingWindow()
     PackageDisplayCell *cell9 = new PackageDisplayCell(9, "Snorkeling", ":/resources/images/snorkel.jpg");
     PackageDisplayCell *cell10 = new PackageDisplayCell(10, "Scuba diving", ":/resources/images/scuba.jpg");
     PackageDisplayCell *cell11 = new PackageDisplayCell(11, "Deep sea diving", ":/resources/images/deepdiving.jpg");
+
+    // fifth category
+    PackageDisplayCell *cell12 = new PackageDisplayCell(12, "Parasailing", ":/resources/images/parasailing.jpg");
+    PackageDisplayCell *cell13 = new PackageDisplayCell(13, "Skydiving", ":/resources/images/skydive.jpg");
 
     // add extra staffs to the pages
     this->_labelCategoryOne = new QLabel("Lets buy some sailing gears");
@@ -70,6 +74,9 @@ BookingWindow::BookingWindow()
     _itemDisplayGridLayout_CategoryFour->addWidget(cell9, 0, 0);
     _itemDisplayGridLayout_CategoryFour->addWidget(cell10, 0, 1);
     _itemDisplayGridLayout_CategoryFour->addWidget(cell11, 1, 0);
+
+    _itemDisplayGridLayout_CategoryFive->addWidget(cell12, 0, 0);
+    _itemDisplayGridLayout_CategoryFive->addWidget(cell13, 0, 1);
 
     _firstPage->setLayout(_itemDisplayGridLayout_CategoryOne);
     _secondPage->setLayout(_itemDisplayGridLayout_CategoryTwo);
@@ -107,6 +114,9 @@ BookingWindow::BookingWindow()
     connect(cell9, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
     connect(cell10, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
     connect(cell11, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
+    connect(cell12, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
+    connect(cell13, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
+
 
     connect(_backButton, SIGNAL(clicked()), this, SLOT(backButtonClicked()));
 }
@@ -159,7 +169,31 @@ void BookingWindow::showBookingForm(){
     case 11:
         form11.exec();
         break;
+    case 12:
+        form12.exec();
+        break;
+    case 13:
+        form13.exec();
+        break;
     default:
         qDebug() << "what's happening?";
     }
+}
+
+void BookingWindow::setCustomerID(QString ID){
+    this->_customerID = ID;
+
+    form1.setCustomerID(_customerID);
+    form2.setCustomerID(_customerID);
+    form3.setCustomerID(_customerID);
+    form4.setCustomerID(_customerID);
+    form5.setCustomerID(_customerID);
+    form6.setCustomerID(_customerID);
+    form7.setCustomerID(_customerID);
+    form8.setCustomerID(_customerID);
+    form9.setCustomerID(_customerID);
+    form10.setCustomerID(_customerID);
+    form11.setCustomerID(_customerID);
+    form12.setCustomerID(_customerID);
+    form13.setCustomerID(_customerID);
 }
