@@ -28,7 +28,8 @@ SOURCES += \
     itembookingform.cpp \
     bookingdatabaseutils.cpp \
     purchaseconfirmationdialog.cpp \
-    databasehandler.cpp
+    databasehandler.cpp \
+    myaccountpage.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -48,7 +49,8 @@ HEADERS += \
     itembookingform.h \
     bookingdatabaseutils.h \
     purchaseconfirmationdialog.h \
-    databasehandler.h
+    databasehandler.h \
+    myaccountpage.h
 
 RESOURCES += \
     resources.qrc

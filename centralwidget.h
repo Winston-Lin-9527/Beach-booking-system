@@ -9,6 +9,7 @@
 
 class CreateAccountWizard;
 class LoginDialog;
+class MyAccountPage;
 class QLabel;
 class QStackedWidget;
 class QPushButton;
@@ -31,6 +32,7 @@ public:
     void loadFromFile();
 
 public slots:
+    void loginButtonClicked();
     void createAccountButtonClicked();
     void bookingButtonClicked();
     void backToHomePage();
@@ -61,6 +63,7 @@ private:
 
     CreateAccountWizard *_createAccountWizard;
     LoginDialog *_loginDialog;
+    MyAccountPage *_myAccountPage;
 
     UserModel *_userModel;
     bool _isCurrentlyLogin;

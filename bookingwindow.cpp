@@ -36,10 +36,10 @@ BookingWindow::BookingWindow()
     PackageDisplayCell *cell2 = new PackageDisplayCell(2, "Kite Surfing", ":/resources/images/kitesurfing.png");
 
     // second category..
-    PackageDisplayCell *cell3 = new PackageDisplayCell(3, "Dinghie", ":/resources/images/dinghie.jpg");
+    PackageDisplayCell *cell3 = new PackageDisplayCell(3, "Hobie", ":/resources/images/hobie.jpg");
     PackageDisplayCell *cell4 = new PackageDisplayCell(4, "Keelboats & yachts", ":/resources/images/keelboat.png");
     PackageDisplayCell *cell5 = new PackageDisplayCell(5, "Multi-hulls", ":/resources/images/multihulls.jpg");
-    PackageDisplayCell *cell6 = new PackageDisplayCell(6, "Board-sailing", ":/resources/images/sailing.jpg");
+    PackageDisplayCell *cell6 = new PackageDisplayCell(6, "Laser Sailing", ":/resources/images/sailing.jpg");
 
     // third category
     PackageDisplayCell *cell7 = new PackageDisplayCell(7, "Paddle boarding", ":/resources/images/paddleboarding.jpg");

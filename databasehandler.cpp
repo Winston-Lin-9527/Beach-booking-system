@@ -45,15 +45,43 @@ void databasehandler::loadFromFile(){
 
 bool databasehandler::checkTimeCollision(Booking newBooking){
     bool collided = false;
-//    if(newBooking.duration30mins)
+    QTime endTime;
+
+    if(newBooking.duration30mins)
+        endTime = newBooking.startTime.addSecs(1800);
+    else
+        endTime = newBooking.startTime.addSecs(3600);
+
+     qDebug()<<"New Start time: "<<newBooking.startTime;
+     qDebug()<<"New end time: "<<endTime;
+
+     qDebug()<<"Old start time: "<<_bookings.at(0).startTime;
+     QTime tempEndTime;
+     if(_bookings.at(0).duration30mins == true)
+         tempEndTime = _bookings.at(0).startTime.addSecs(1800);
+     else
+         tempEndTime = _bookings.at(0).startTime.addSecs(3600);
+     qDebug()<<"Old end time: "<<tempEndTime;
+
+     qDebug()<<"new start secs to old end: "<<_bookings.at(0).startTime.secsTo(endTime);
+
 
 //    // check if any time product with time range collision
-//    for(int i=0; i<_bookings.size(); i++){
-//        if(_bookings.at(i).customerID == newBooking.customerID)
-//            if(_bookings.at(i).startTime.secsTo(newBooking.startTime) < 0 || this->_timeEdit->time().secsTo(loadedEntries.at(i).endTime) > 0)
-//                 collided = true;
-//    }
+    for(int i=0; i<_bookings.size(); i++){
+        if(_bookings.at(i).customerID == newBooking.customerID){
+            qDebug()<<"Existing booking time: "<<_bookings.at(i).startTime;
+            QTime tempEndTime;
+            if(_bookings.at(i).duration30mins == true)
+                tempEndTime = _bookings.at(i).startTime.addSecs(1800);
+            else
+                tempEndTime = _bookings.at(i).startTime.addSecs(3600);
 
+            if((_bookings.at(i).date == newBooking.date))
+                if((_bookings.at(i).startTime.secsTo(endTime) >= 0 && endTime.secsTo(tempEndTime) >= 0)
+                        || (_bookings.at(i).startTime.secsTo(newBooking.startTime) >= 0 && newBooking.startTime.secsTo(tempEndTime) >= 0))
+                    collided = true;
+        }
+    }
     return collided;
 }
 

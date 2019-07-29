@@ -104,7 +104,7 @@ PersonalPage::PersonalPage():QWizardPage(nullptr){
     this->registerField("personal.firstname*", _firstNameLineEdit);
     this->registerField("personal.lastname*", _lastNameLineEdit);
     this->registerField("personal.address*", _addressLineEdit);
-    this->registerField("personal.email", _emailLineEdit);
+    this->registerField("personal.email*", _emailLineEdit);
     this->registerField("personal.DOB", _DOBDateEdit);
     this->registerField("personal.sex", _sexComboBox, "currentText");   // this allows register member of object
 
@@ -164,9 +164,9 @@ AccSettingPage::AccSettingPage():QWizardPage(nullptr){
     _passwordConfirmLabel = new QLabel("Re-enter your password:");
     _resortNumberLabel = new QLabel("Your resort room number:");
 
-    this->registerField("Acc.username", _usernameLineEdit);
-    this->registerField("Acc.password", _passwordLineEdit);
-    this->registerField("Acc.resortnumber", _resortNumberLineEdit);
+    this->registerField("Acc.username*", _usernameLineEdit);
+    this->registerField("Acc.password*", _passwordLineEdit);
+    this->registerField("Acc.resortnumber*", _resortNumberLineEdit);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
 
@@ -243,9 +243,9 @@ PaymentSettingPage::PaymentSettingPage():QWizardPage(nullptr){
     _visaExpiryDateLabel = new QLabel("Visa expiry date: ");
     _visaCVVLabel = new QLabel("CVV: ");
 
-    this->registerField("Visa.number", _visaCardNumber_LineEdit);
+    this->registerField("Visa.number*", _visaCardNumber_LineEdit);
     this->registerField("Visa.expiryDate", _visaExpiryDate_DateEdit);
-    this->registerField("Visa.CVV", _visaCVV_LineEdit);
+    this->registerField("Visa.CVV*", _visaCVV_LineEdit);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
 
@@ -272,7 +272,7 @@ SummaryPage::SummaryPage():QWizardPage(nullptr){
     this->setTitle("Summary");
 
     this->_checkBox = new QCheckBox;
-    this->registerField("Summary.check", _checkBox);
+    this->registerField("Summary.check*", _checkBox);
 
     this->_confirmationText = new QLabel("I have reviewed my details and confirm they are correct.");
 

@@ -35,7 +35,6 @@ void BookingDatabaseUtils::removeEntry(int id){
     query.prepare(query_remove);
 
     if(!query.exec()){
-        qDebug() << "error: failed to remove entry.";
         qDebug() << query.lastError();
     }
 }

@@ -73,7 +73,6 @@ public:
     void loadFromFile();
 
     bool checkTimeCollision(Booking newBooking);
-
     void addBooking(Booking newBooking);
 
     QList<Booking> getBookings() const;

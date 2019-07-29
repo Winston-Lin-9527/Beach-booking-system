@@ -46,7 +46,7 @@ inline QTextStream &operator<< (QTextStream &out, User &user){
        out << user._resortNumber<<endl;
        out << user._isMale<<endl;
        out << user._DOB.toString("yyyy.MM.dd")<<endl;
-       out << user._visaNumber;
+       out << user._visaNumber<<endl;
        out << user._visaExpiryDate.toString("yyyy.MM.dd")<<endl;
        out << user._CVV<<endl;
 

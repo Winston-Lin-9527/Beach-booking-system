@@ -11,6 +11,7 @@
 #include "centralwidget.h"
 #include "createaccountwizard.h"
 #include "logindialog.h"
+#include "myaccountpage.h"
 #include "usermodel.h"
 
 CentralWidget::CentralWidget(QWidget *parent)
@@ -87,12 +88,21 @@ CentralWidget::CentralWidget(QWidget *parent)
     connect(_createAccountButton, SIGNAL(clicked()), this, SLOT(createAccountButtonClicked()));
     connect(_bookingButton, SIGNAL(clicked()), this, SLOT(bookingButtonClicked()));
     connect(_createAccountWizard->page(4), SIGNAL(sendDetails(User&)), this, SLOT(addAccount(User&)));
-    connect(_loginAccountButton, SIGNAL(clicked()), _loginDialog, SLOT(exec()));
+    connect(_loginAccountButton, SIGNAL(clicked()), this, SLOT(loginButtonClicked()));
     connect(_loginDialog, SIGNAL(requestLogin(QString, QString)), this, SLOT(loginRequested(QString, QString)));
     connect(_bookingWindow, SIGNAL(signalBackToHomePage()), this, SLOT(backToHomePage()));
 }
 
 CentralWidget::~CentralWidget(){}
+
+void CentralWidget::loginButtonClicked(){
+    if(this->_isCurrentlyLogin == false)
+        this->_loginDialog->open(); // apparently better than exec() ?...
+    else{
+        this->_myAccountPage = new MyAccountPage(this->_currentSessionUserID);
+        _myAccountPage->openPage();
+    }
+}
 
 void CentralWidget::createAccountButtonClicked(){
     this->_createAccountWizard->restart();
@@ -200,15 +210,15 @@ QByteArray CentralWidget::toHash(QString stringToHash, QCryptographicHash::Algor
 }
 
 void CentralWidget::loginRequested(QString username, QString passwordInPlainText){
-
     QByteArray passwordInHash = this->toHash(passwordInPlainText, QCryptographicHash::Sha256);
-
+    qDebug() << "login requested";
     QModelIndex index = QModelIndex();
     bool found = false;
     index = this->_userModel->index(0, 2, QModelIndex());
 
     for(int row = 0; row < this->_userModel->getUsers().size(); row++){
          index = this->_userModel->index(row, 1, QModelIndex());
+         qDebug() << "follow user: " << this->_userModel->data(index, Qt::DisplayRole);
          if(username == this->_userModel->data(index, Qt::DisplayRole)){
              found = true;
              // if user exists then check the password
@@ -217,6 +227,7 @@ void CentralWidget::loginRequested(QString username, QString passwordInPlainText
              if(passwordInHash == this->_userModel->data(index, Qt::DisplayRole).toByteArray()){
                   // the credentials are now verified.
                  qDebug() << "login successful";
+                 this->_loginAccountButton->setText("View My Account");
 
                  index = this->_userModel->index(row, 0, QModelIndex());
                  this->_currentSessionUserID = this->_userModel->data(index, Qt::DisplayRole).toString();

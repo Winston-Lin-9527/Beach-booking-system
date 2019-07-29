@@ -23,8 +23,7 @@ ItemBookingForm::ItemBookingForm(){
     QTime lowerBound;
     QTime upperBound;
 
-    // hardcode the boundary for each product kind
-
+    // hardcode the time boundary for each product kind(tide), which kind of makes sense although ugly
     switch(_productID){
     case 1:
         productBannerPath = ":/resources/images/surf.jpg";
@@ -37,7 +36,7 @@ ItemBookingForm::ItemBookingForm(){
         upperBound = QTime();
         break;
     case 3:
-        productBannerPath = ":/resources/images/dinghie.jpg";
+        productBannerPath = ":/resources/images/hobie.jpg";
         lowerBound = QTime();
         upperBound = QTime();
         break;
@@ -123,6 +122,7 @@ ItemBookingForm::ItemBookingForm(){
     _dateEdit->setMaximumDate(QDate::currentDate().addDays(365));
     _dateEdit->setDisplayFormat("yyyy.MM.dd");
     _timeEdit->setTimeRange(lowerBound, upperBound);
+    _timeEdit->setDisplayFormat("H:m:s");
     _dateTimeEditLayout->addWidget(_dateEdit);
     _dateTimeEditLayout->addWidget(_timeEdit);
     _timeSelectionGroupBox->setLayout(_dateTimeEditLayout);
@@ -167,14 +167,18 @@ void ItemBookingForm::handleConfirmButtonClick(){
        this->_dateEdit->date(),
        this->_timeEdit->time(),
        this->_30minsCheckBox->isChecked(),
-       this->_quantityComboBox->currentIndex()
+       this->_quantityComboBox->currentText().toInt()
    };
-   qDebug()<<"new booking record has been written to database";
+   if(!handler.checkTimeCollision(newBooking)){
+       qDebug()<<"This item is added under the name of " << this->_customerID;
 
-   handler.addBooking(newBooking);
-   handler.saveToFile();
+       handler.addBooking(newBooking);
+       handler.saveToFile();
 
-   QMessageBox::about(this, "success", "New Booking has been added");
+       QMessageBox::about(this, "success", "New Booking has been added");
+   }
+   else
+       QMessageBox::warning(this, "Error", "This new booking is in time conflict with one of your existing booking.");
 }
 
 void ItemBookingForm::setCustomerID(QString ID){
