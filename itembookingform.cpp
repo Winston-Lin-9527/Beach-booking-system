@@ -27,66 +27,79 @@ ItemBookingForm::ItemBookingForm(){
     switch(_productID){
     case 1:
         productBannerPath = ":/resources/images/surf.jpg";
-        lowerBound = QTime(2, 23, 0);
-        upperBound = QTime(3, 23, 0);
+        _price = 50;
+        lowerBound = QTime(2, 23);
+        upperBound = QTime(5, 23);
         break;
     case 2:
         productBannerPath = ":/resources/images/kitesurfing.png";
+        _price = 70;
         lowerBound = QTime();
         upperBound = QTime();
         break;
     case 3:
         productBannerPath = ":/resources/images/hobie.jpg";
+        _price = 100;
         lowerBound = QTime();
         upperBound = QTime();
         break;
     case 4:
         productBannerPath = ":/resources/images/keelboat.png";
+        _price = 100;
         lowerBound = QTime();
         upperBound = QTime();
         break;
     case 5:
         productBannerPath = ":/resources/images/multihulls.jpg";
+        _price = 100;
         lowerBound = QTime();
         upperBound = QTime();
         break;
     case 6:
         productBannerPath = ":/resources/images/sailing.png";
+        _price = 150;
         lowerBound = QTime();
         upperBound = QTime();
         break;
     case 7:
         productBannerPath = ":/resources/images/paddleboarding.jpg";
+        _price = 100;
         lowerBound = QTime();
         upperBound = QTime();
         break;
     case 8:
         productBannerPath = ":/resources/images/seakayaking.jpg";
+        _price = 120;
         lowerBound = QTime();
         upperBound = QTime();
         break;
     case 9:
         productBannerPath = ":/resources/images/snorkel.jpg";
+        _price = 150;
         lowerBound = QTime();
         upperBound = QTime();
         break;
     case 10:
         productBannerPath = ":/resources/images/scuba.jpg";
+        _price = 100;
         lowerBound = QTime();
         upperBound = QTime();
         break;
     case 11:
         productBannerPath = ":/resources/images/deepdiving.jpg";
+        _price = 100;
         lowerBound = QTime();
         upperBound = QTime();
         break;
     case 12:
         productBannerPath = ":/resources/images/parasailing.jpg";
+        _price = 300;
         lowerBound = QTime();
         upperBound = QTime();
         break;
     case 13:
         productBannerPath = ":/resources/images/skydive.jpg";
+        _price = 500;
         lowerBound = QTime();
         upperBound = QTime();
         break;
@@ -135,7 +148,7 @@ ItemBookingForm::ItemBookingForm(){
     _quantityEditLayout->addWidget(_quantityComboBox);
     _quantitySelectionGroupBox->setLayout(_quantityEditLayout);
 
-    this->_confirmButton = new QPushButton("Continue");
+    this->_confirmButton = new QPushButton("Pay Now ($" + QString::number(_price) + ")");
 
     this->_productBanner = new QLabel;
     QImage bannerImage(productBannerPath);
@@ -169,18 +182,29 @@ void ItemBookingForm::handleConfirmButtonClick(){
        this->_30minsCheckBox->isChecked(),
        this->_quantityComboBox->currentText().toInt()
    };
-   if(!handler.checkTimeCollision(newBooking)){
-       qDebug()<<"This item is added under the name of " << this->_customerID;
 
-       handler.addBooking(newBooking);
-       handler.saveToFile();
+   if((this->_30minsCheckBox->isChecked() ? _price : _price * 2)*this->_quantityComboBox->currentText().toInt() < _balance){
+       if(!handler.checkTimeCollision(newBooking)){
+           qDebug()<<"This item is added under the name of " << this->_customerID;
 
-       QMessageBox::about(this, "success", "New Booking has been added");
+           handler.addBooking(newBooking);
+           handler.saveToFile();
+
+           emit balanceChanged(_balance - (this->_30minsCheckBox->isChecked() ? _price : _price * 2)*this->_quantityComboBox->currentText().toInt());
+
+           QMessageBox::about(this, "success", "New Booking has been added");
+       }
+       else
+           QMessageBox::warning(this, "Error", "This new booking is in time conflict with one of your existing booking.");
    }
    else
-       QMessageBox::warning(this, "Error", "This new booking is in time conflict with one of your existing booking.");
+       QMessageBox::warning(this, "Transaction Failure", "Insufficient balance, please top up");
 }
 
 void ItemBookingForm::setCustomerID(QString ID){
     this->_customerID = ID;
+}
+
+void ItemBookingForm::setBalance(int balance){
+    this->_balance = balance;
 }

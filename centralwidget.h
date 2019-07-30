@@ -36,12 +36,11 @@ public slots:
     void createAccountButtonClicked();
     void bookingButtonClicked();
     void backToHomePage();
+    void logoutButtonClicked();
 
     void addAccount(User &user);
     void loginRequested(QString username, QString passwordInPlainText);
-
-//    void editAccount();
-//    void removeAccount();
+    void changeBalance(int newBalance);
 
 private:
     QLabel *_welcomeLabel;
@@ -50,6 +49,7 @@ private:
     QPushButton *_bookingButton;
     QPushButton *_createAccountButton;
     QPushButton *_loginAccountButton;
+    QPushButton *_logoutAccountButton;
 
     QLayout *_mainLayout;
     QStackedWidget *_stackedWindows;
@@ -67,8 +67,9 @@ private:
 
     UserModel *_userModel;
     bool _isCurrentlyLogin;
-    QString _currentSessionUserID; // 6 digits ID
     QString _userFileDirectory;
+    User _currentUser;
+    int shame;
 };
 
 #endif // CENTRALWIDGET_H

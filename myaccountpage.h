@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#include "usermodel.h"
+
 class QLabel;
 class QTableWidget;
 class QGridLayout;
@@ -13,15 +15,13 @@ class MyAccountPage : public QDialog
 
 public:
     MyAccountPage();
-    MyAccountPage(QString accountID);
-    void openPage();
+    void openPage(QString customerID, int balance);
 
 private:
     QTableWidget *_bookingRecordTable;
     QLabel *_activeBookingLabel;
     QLabel *_accountAboutLabel;
-
-    QString *_accountID;
+    QLabel *_balanceLabel;
 
     QGridLayout *_mLayout;
 };

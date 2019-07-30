@@ -52,6 +52,8 @@ QVariant UserModel::data(const QModelIndex &index, int role) const{
                 return user._visaExpiryDate;
             case 12:
                 return user._CVV;
+            case 13:
+                return user._balance;
         }
     }
     return QVariant();
@@ -91,7 +93,8 @@ bool UserModel::insertRows(int position, int rows, const QModelIndex &index){
                                    QDate(),
                                    QString(),
                                    QDate(),
-                                   QString()});
+                                   QString(),
+                                   int()});
     endInsertRows();
     return true;
 }
@@ -124,6 +127,7 @@ bool UserModel::setData(const QModelIndex &index, const QVariant &value, int rol
             case 10: user._visaNumber = value.toString(); break;
             case 11: user._visaExpiryDate = value.toDate(); break;
             case 12: user._CVV = value.toString(); break;
+            case 13: user._balance = value.toInt(); break;
 
             default: return false;
         }

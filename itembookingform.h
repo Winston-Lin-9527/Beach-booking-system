@@ -22,12 +22,15 @@ class ItemBookingForm : public QDialog
 public:
     ItemBookingForm();
     void setCustomerID(QString ID);
+    void setBalance(int balance);
 
     static int _counter;
 
+signals:
+    void balanceChanged(int newBalance);
+
 private slots:
     void handleConfirmButtonClick();
-    // todo: handle two checkBoxes, need to be opposite
 
 private:
     QHBoxLayout *_mLayout;
@@ -55,6 +58,8 @@ private:
 
     int _productID;
     QString _customerID;
+    int _balance;
+    int _price; // the price for 30 mins
 };
 
 #endif // ITEMBOOKINGFORM_H

@@ -8,6 +8,7 @@
 #include <QComboBox>
 #include <QScrollArea>
 #include <QCheckBox>
+#include <QSpinBox>
 
 #include "createaccountwizard.h"
 #include "usermodel.h"
@@ -243,9 +244,15 @@ PaymentSettingPage::PaymentSettingPage():QWizardPage(nullptr){
     _visaExpiryDateLabel = new QLabel("Visa expiry date: ");
     _visaCVVLabel = new QLabel("CVV: ");
 
+    _balanceSpinBox = new QSpinBox;
+    _balanceSpinBox->setPrefix("$ ");
+    _balanceSpinBox->setRange(0, 999);
+    _balanceLabel = new QLabel("Top-up Balance: ");
+
     this->registerField("Visa.number*", _visaCardNumber_LineEdit);
     this->registerField("Visa.expiryDate", _visaExpiryDate_DateEdit);
     this->registerField("Visa.CVV*", _visaCVV_LineEdit);
+    this->registerField("Visa.balance", _balanceSpinBox);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
 
@@ -261,9 +268,14 @@ PaymentSettingPage::PaymentSettingPage():QWizardPage(nullptr){
     visaCVVHorizontalLayout->addWidget(_visaCVVLabel);
     visaCVVHorizontalLayout->addWidget(_visaCVV_LineEdit);
 
+    QHBoxLayout *visaBalanceHorizontalLayout = new QHBoxLayout;
+    visaBalanceHorizontalLayout->addWidget(_balanceLabel);
+    visaBalanceHorizontalLayout->addWidget(_balanceSpinBox);
+
     mainLayout->addLayout(visaCardNumberHorizontalLayout);
     mainLayout->addLayout(visaExpiryDateHorizontalLayout);
     mainLayout->addLayout(visaCVVHorizontalLayout);
+    mainLayout->addLayout(visaBalanceHorizontalLayout);
 
     this->setLayout(mainLayout);
 }
@@ -297,12 +309,13 @@ bool SummaryPage::validatePage(){
             field("personal.lastname").toString(),                           // 5
             field("personal.address").toString(),                            // 6
             field("personal.email").toString(),                              // 7
-            field("Acc.resortnumber").toInt(),                               // 9
+            field("Acc.resortnumber").toInt(),                               // 8
             (field("personal.sex").toString() == "Male" ? true : false),     // make male = true, female = false
-            field("personal.DOB").toDate(),                                  // 11
-            field("Visa.number").toString(),                                 // 12
-            field("Visa.expiryDate").toDate(),                               // 13
-            field("Visa.CVV").toString()                                     // 14
+            field("personal.DOB").toDate(),                                  // 9
+            field("Visa.number").toString(),                                 // 10
+            field("Visa.expiryDate").toDate(),                               // 11
+            field("Visa.CVV").toString(),                                    // 12
+            field("Visa.balance").toInt()                                    // 13
         };
 
         emit sendDetails(newUser);  // broadcast(send) the created user object to centralwidget

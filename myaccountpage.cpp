@@ -40,11 +40,8 @@ QString giveProductName(int productID){
     return QString();
 }
 
-MyAccountPage::MyAccountPage(){ };
-
-MyAccountPage::MyAccountPage(QString accountID)
+MyAccountPage::MyAccountPage()
 {
-    this->_accountID = new QString(accountID);
 
     this->_bookingRecordTable = new QTableWidget(this);
     _bookingRecordTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -59,24 +56,30 @@ MyAccountPage::MyAccountPage(QString accountID)
     font.setPointSize(25);
     _activeBookingLabel->setFont(font);
 
+    this->_balanceLabel = new QLabel("");
+
     this->_mLayout = new QGridLayout;
     _mLayout->addWidget(_activeBookingLabel, 0, 0);
-    _mLayout->addWidget(_bookingRecordTable, 1, 0);
+    _mLayout->addWidget(_balanceLabel, 1, 0);
+    _mLayout->addWidget(_bookingRecordTable, 2, 0);
 
     this->setLayout(_mLayout);
     this->setFixedSize(QSize(560, 400));
 }
 
-void MyAccountPage::openPage(){
+void MyAccountPage::openPage(QString accountID, int balance){
+    QString balanceText("Your balance: $");
+    balanceText += QString::number(balance);
+
+    _balanceLabel->setText(balanceText);
+
     databasehandler handler;
     handler.loadFromFile();
     QList<Booking> loadedList = handler.getBookings();
     QList<Booking> filteredList;
 
-    qDebug() << "current ID:" << *_accountID;
-
     for(int i = 0; i < loadedList.size(); i++)
-        if(loadedList.at(i).customerID == *this->_accountID){
+        if(loadedList.at(i).customerID == accountID){
             filteredList.append(loadedList.at(i));
         }
 

@@ -19,9 +19,11 @@ class BookingWindow : public QWidget
 public:
     BookingWindow();
     void setCustomerID(QString ID);
+    void setBalance(int balance);
 
 signals:
     void signalBackToHomePage();
+    void balanceChanged(int newBalance);
 
 private slots:
     void backButtonClicked();
@@ -72,8 +74,6 @@ private:
     ItemBookingForm form11;
     ItemBookingForm form12;
     ItemBookingForm form13;
-
-    QString _customerID;
 };
 
 #endif // BOOKINGWINDOW_H

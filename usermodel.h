@@ -21,6 +21,7 @@ struct User{
     QString _visaNumber;        //11
     QDate _visaExpiryDate;      //12
     QString _CVV;               //13        *13 fields
+    int _balance;
 
     int operator== (const User &other) const {
         if(_userName == other._userName)
@@ -49,6 +50,7 @@ inline QTextStream &operator<< (QTextStream &out, User &user){
        out << user._visaNumber<<endl;
        out << user._visaExpiryDate.toString("yyyy.MM.dd")<<endl;
        out << user._CVV<<endl;
+       out << user._balance<<endl;
 
        return out;
 }
@@ -72,6 +74,7 @@ inline QTextStream &operator>> (QTextStream &in, User *user){
     in >> temp;
     user->_visaExpiryDate = QDate::fromString(temp, "yyyy.MM.dd");
     in >> user->_CVV;
+    in >> user->_balance;
 
     return in;
 }

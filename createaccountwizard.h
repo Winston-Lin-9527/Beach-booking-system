@@ -10,6 +10,7 @@ class QDateEdit;
 class QComboBox;
 class QScrollArea;
 class QCheckBox;
+class QSpinBox;
 
 struct User;
 
@@ -101,10 +102,12 @@ private:
     QLineEdit *_visaCardNumber_LineEdit;
     QDateEdit *_visaExpiryDate_DateEdit;
     QLineEdit *_visaCVV_LineEdit;
+    QSpinBox *_balanceSpinBox;
 
     QLabel *_visaCardNumberLabel;
     QLabel *_visaExpiryDateLabel;
     QLabel *_visaCVVLabel;
+    QLabel *_balanceLabel;
 };
 
 /*

@@ -52,18 +52,18 @@ bool databasehandler::checkTimeCollision(Booking newBooking){
     else
         endTime = newBooking.startTime.addSecs(3600);
 
-     qDebug()<<"New Start time: "<<newBooking.startTime;
-     qDebug()<<"New end time: "<<endTime;
+//     qDebug()<<"New Start time: "<<newBooking.startTime;
+//     qDebug()<<"New end time: "<<endTime;
 
-     qDebug()<<"Old start time: "<<_bookings.at(0).startTime;
-     QTime tempEndTime;
-     if(_bookings.at(0).duration30mins == true)
-         tempEndTime = _bookings.at(0).startTime.addSecs(1800);
-     else
-         tempEndTime = _bookings.at(0).startTime.addSecs(3600);
-     qDebug()<<"Old end time: "<<tempEndTime;
+//     qDebug()<<"Old start time: "<<_bookings.at(0).startTime;
+//     QTime tempEndTime;
+//     if(_bookings.at(0).duration30mins == true)
+//         tempEndTime = _bookings.at(0).startTime.addSecs(1800);
+//     else
+//         tempEndTime = _bookings.at(0).startTime.addSecs(3600);
+//     qDebug()<<"Old end time: "<<tempEndTime;
 
-     qDebug()<<"new start secs to old end: "<<_bookings.at(0).startTime.secsTo(endTime);
+//     qDebug()<<"new start secs to old end: "<<_bookings.at(0).startTime.secsTo(endTime);
 
 
 //    // check if any time product with time range collision

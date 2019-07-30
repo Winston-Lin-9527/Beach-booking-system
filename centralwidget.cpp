@@ -12,7 +12,6 @@
 #include "createaccountwizard.h"
 #include "logindialog.h"
 #include "myaccountpage.h"
-#include "usermodel.h"
 
 CentralWidget::CentralWidget(QWidget *parent)
 {
@@ -20,12 +19,12 @@ CentralWidget::CentralWidget(QWidget *parent)
     _stackedWindows = new QStackedWidget;
     _userModel = new UserModel(this);
     _isCurrentlyLogin = false;
-    _currentSessionUserID = "";
-    _userFileDirectory = "userBase.sqlite";    // by default the file storing is userBase.txt, but customization is ok
+    _userFileDirectory = "userBase.sqlite";    // by default the file storing is userBase.sqlite, but customization is ok
 
     // dialogs
     _createAccountWizard = new CreateAccountWizard;
     _loginDialog = new LoginDialog;
+    this->_myAccountPage = new MyAccountPage;
 
     // layouts structures
     _mainLayout = new QHBoxLayout(this);
@@ -36,7 +35,7 @@ CentralWidget::CentralWidget(QWidget *parent)
     _bookingPageObject = new QWidget(this);
 
     // elements in the first page
-    _welcomeLabel = new QLabel("Welcome To The Beach Sport Renting System");
+    _welcomeLabel = new QLabel("Welcome To The Beach Equipment Rental System");
     QFont font;
     font.setBold(true);
     font.setPointSize(25);
@@ -53,9 +52,15 @@ CentralWidget::CentralWidget(QWidget *parent)
     welcomeLayout->addWidget(_welcomeLabelBanner);
     welcomeLayout->setContentsMargins(0, 5, 0, 80);
 
-    _createAccountButton = new QPushButton("create account");
+    _createAccountButton = new QPushButton("Create Account");
     _bookingButton = new QPushButton("Make New Bookings");
     _loginAccountButton = new QPushButton("Login");
+    _logoutAccountButton = new QPushButton("Logout");
+    _logoutAccountButton->setEnabled(false);
+
+    QHBoxLayout *loginHLayout = new QHBoxLayout;
+    loginHLayout->addWidget(_loginAccountButton);
+    loginHLayout->addWidget(_logoutAccountButton);
 
     // booking page
     _bookingWindow = new BookingWindow();
@@ -63,7 +68,7 @@ CentralWidget::CentralWidget(QWidget *parent)
     // first page
     this->_introLayout->setMargin(5);
     _introLayout->addLayout(welcomeLayout);
-    _introLayout->addWidget(_loginAccountButton);
+    _introLayout->addLayout(loginHLayout);
     _introLayout->addWidget(_bookingButton);
     _introLayout->addWidget(_createAccountButton);
     _introPageObject->setLayout(_introLayout);
@@ -91,6 +96,8 @@ CentralWidget::CentralWidget(QWidget *parent)
     connect(_loginAccountButton, SIGNAL(clicked()), this, SLOT(loginButtonClicked()));
     connect(_loginDialog, SIGNAL(requestLogin(QString, QString)), this, SLOT(loginRequested(QString, QString)));
     connect(_bookingWindow, SIGNAL(signalBackToHomePage()), this, SLOT(backToHomePage()));
+    connect(_bookingWindow, SIGNAL(balanceChanged(int)), this, SLOT(changeBalance(int)));
+    connect(_logoutAccountButton, SIGNAL(clicked()), this, SLOT(logoutButtonClicked()));
 }
 
 CentralWidget::~CentralWidget(){}
@@ -99,9 +106,17 @@ void CentralWidget::loginButtonClicked(){
     if(this->_isCurrentlyLogin == false)
         this->_loginDialog->open(); // apparently better than exec() ?...
     else{
-        this->_myAccountPage = new MyAccountPage(this->_currentSessionUserID);
-        _myAccountPage->openPage();
+        _myAccountPage->openPage(this->_currentUser._accountID, this->_currentUser._balance);
     }
+}
+
+void CentralWidget::logoutButtonClicked(){
+    _isCurrentlyLogin = false;
+    shame = 0;
+    _currentUser = {};
+    _loginAccountButton->setText("Login");
+    _logoutAccountButton->setEnabled(false);
+    this->update();
 }
 
 void CentralWidget::createAccountButtonClicked(){
@@ -112,7 +127,8 @@ void CentralWidget::createAccountButtonClicked(){
 void CentralWidget::bookingButtonClicked(){
     if(this->_isCurrentlyLogin){
         _stackedWindows->setCurrentIndex(1);
-        _bookingWindow->setCustomerID(_currentSessionUserID);
+        _bookingWindow->setCustomerID(this->_currentUser._accountID);
+        _bookingWindow->setBalance(this->_currentUser._balance);
     }
     else
         QMessageBox::information(this, "Warning", "Please login first.");
@@ -175,12 +191,21 @@ void CentralWidget::addAccount(User &newUserObject){
 
         index = _userModel->index(0, 12, QModelIndex());
         this->_userModel->setData(index, newUserObject._CVV);
+
+        index = _userModel->index(0, 13, QModelIndex());
+        this->_userModel->setData(index, newUserObject._balance);
     }
     else{
         QMessageBox::information(this, QString("Duplicate"),
                    tr("The name \"%1\" already exists.").arg(newUserObject._userName));
     }
-    qDebug() << "now there are "<< _userModel->getUsers().size() << " users in database";
+    if(this->_isCurrentlyLogin){
+        _isCurrentlyLogin = false;
+        shame = 0;
+        _currentUser = {};
+        _loginAccountButton->setText("Login");
+    }
+
     saveToFile();
 }
 
@@ -218,8 +243,7 @@ void CentralWidget::loginRequested(QString username, QString passwordInPlainText
 
     for(int row = 0; row < this->_userModel->getUsers().size(); row++){
          index = this->_userModel->index(row, 1, QModelIndex());
-         qDebug() << "follow user: " << this->_userModel->data(index, Qt::DisplayRole);
-         if(username == this->_userModel->data(index, Qt::DisplayRole)){
+            if(username == this->_userModel->data(index, Qt::DisplayRole)){
              found = true;
              // if user exists then check the password
              index = this->_userModel->index(row, 2, QModelIndex());
@@ -230,10 +254,12 @@ void CentralWidget::loginRequested(QString username, QString passwordInPlainText
                  this->_loginAccountButton->setText("View My Account");
 
                  index = this->_userModel->index(row, 0, QModelIndex());
-                 this->_currentSessionUserID = this->_userModel->data(index, Qt::DisplayRole).toString();
 
                  this->_loginDialog->handleReturnStatus(StatusCode::LOGIN_SUCCESS);
                  this->_isCurrentlyLogin = true;
+                 this->shame = row;
+                 this->_currentUser = this->_userModel->getUsers().at(row); // for my account page display balance
+                 this->_logoutAccountButton->setEnabled(true);
              }
              else{
                  this->_loginDialog->handleReturnStatus(StatusCode::LOGIN_FAILURE_NONMATCHING_CREDENTIALS);
@@ -279,4 +305,12 @@ void CentralWidget::loadFromFile(){
        inStream >> _userModel->getUsersAddress();
 
        file.close();
+}
+
+void CentralWidget::changeBalance(int newBalance){
+    QModelIndex index = _userModel->index(shame, 13, QModelIndex());
+    this->_userModel->setData(index, newBalance);
+    this->_currentUser._balance = newBalance;
+    qDebug()<< "new balance = " << newBalance;
+    saveToFile();
 }

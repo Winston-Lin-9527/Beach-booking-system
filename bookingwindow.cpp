@@ -102,7 +102,7 @@ BookingWindow::BookingWindow()
 
     setLayout(_mLayout);
 
-    // todo connect clicks to display bookingForms
+    // connect clicks to display bookingForms
     connect(cell1, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
     connect(cell2, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
     connect(cell3, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
@@ -116,6 +116,20 @@ BookingWindow::BookingWindow()
     connect(cell11, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
     connect(cell12, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
     connect(cell13, SIGNAL(clickedSignal()), this, SLOT(showBookingForm()));
+
+    connect(&form1, SIGNAL(balanceChanged(int)), this, SIGNAL(balanceChanged(int)));
+    connect(&form2, SIGNAL(balanceChanged(int)), this, SIGNAL(balanceChanged(int)));
+    connect(&form3, SIGNAL(balanceChanged(int)), this, SIGNAL(balanceChanged(int)));
+    connect(&form4, SIGNAL(balanceChanged(int)), this, SIGNAL(balanceChanged(int)));
+    connect(&form5, SIGNAL(balanceChanged(int)), this, SIGNAL(balanceChanged(int)));
+    connect(&form6, SIGNAL(balanceChanged(int)), this, SIGNAL(balanceChanged(int)));
+    connect(&form7, SIGNAL(balanceChanged(int)), this, SIGNAL(balanceChanged(int)));
+    connect(&form8, SIGNAL(balanceChanged(int)), this, SIGNAL(balanceChanged(int)));
+    connect(&form9, SIGNAL(balanceChanged(int)), this, SIGNAL(balanceChanged(int)));
+    connect(&form10, SIGNAL(balanceChanged(int)), this, SIGNAL(balanceChanged(int)));
+    connect(&form11, SIGNAL(balanceChanged(int)), this, SIGNAL(balanceChanged(int)));
+    connect(&form12, SIGNAL(balanceChanged(int)), this, SIGNAL(balanceChanged(int)));
+    connect(&form13, SIGNAL(balanceChanged(int)), this, SIGNAL(balanceChanged(int)));
 
 
     connect(_backButton, SIGNAL(clicked()), this, SLOT(backButtonClicked()));
@@ -181,19 +195,34 @@ void BookingWindow::showBookingForm(){
 }
 
 void BookingWindow::setCustomerID(QString ID){
-    this->_customerID = ID;
 
-    form1.setCustomerID(_customerID);
-    form2.setCustomerID(_customerID);
-    form3.setCustomerID(_customerID);
-    form4.setCustomerID(_customerID);
-    form5.setCustomerID(_customerID);
-    form6.setCustomerID(_customerID);
-    form7.setCustomerID(_customerID);
-    form8.setCustomerID(_customerID);
-    form9.setCustomerID(_customerID);
-    form10.setCustomerID(_customerID);
-    form11.setCustomerID(_customerID);
-    form12.setCustomerID(_customerID);
-    form13.setCustomerID(_customerID);
+    form1.setCustomerID(ID);
+    form2.setCustomerID(ID);
+    form3.setCustomerID(ID);
+    form4.setCustomerID(ID);
+    form5.setCustomerID(ID);
+    form6.setCustomerID(ID);
+    form7.setCustomerID(ID);
+    form8.setCustomerID(ID);
+    form9.setCustomerID(ID);
+    form10.setCustomerID(ID);
+    form11.setCustomerID(ID);
+    form12.setCustomerID(ID);
+    form13.setCustomerID(ID);
+}
+
+void BookingWindow::setBalance(int balance){
+    form1.setBalance(balance);
+    form2.setBalance(balance);
+    form3.setBalance(balance);
+    form4.setBalance(balance);
+    form5.setBalance(balance);
+    form6.setBalance(balance);
+    form7.setBalance(balance);
+    form8.setBalance(balance);
+    form9.setBalance(balance);
+    form10.setBalance(balance);
+    form11.setBalance(balance);
+    form12.setBalance(balance);
+    form13.setBalance(balance);
 }

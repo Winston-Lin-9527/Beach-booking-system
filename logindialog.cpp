@@ -94,6 +94,7 @@ void LoginDialog::handleReturnStatus(StatusCode statusCode){
         int result = msgBox->exec();
 
         this->_lineEditUsername->clear();
+        this->_lineEditPassword->clear();
 
         if(result == QMessageBox::Cancel){
             this->_lineEditUsername->clear();
