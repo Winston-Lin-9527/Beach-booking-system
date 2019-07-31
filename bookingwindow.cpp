@@ -131,7 +131,6 @@ BookingWindow::BookingWindow()
     connect(&form12, SIGNAL(balanceChanged(int)), this, SIGNAL(balanceChanged(int)));
     connect(&form13, SIGNAL(balanceChanged(int)), this, SIGNAL(balanceChanged(int)));
 
-
     connect(_backButton, SIGNAL(clicked()), this, SLOT(backButtonClicked()));
 }
 

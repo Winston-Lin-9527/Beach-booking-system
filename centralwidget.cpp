@@ -98,6 +98,7 @@ CentralWidget::CentralWidget(QWidget *parent)
     connect(_bookingWindow, SIGNAL(signalBackToHomePage()), this, SLOT(backToHomePage()));
     connect(_bookingWindow, SIGNAL(balanceChanged(int)), this, SLOT(changeBalance(int)));
     connect(_logoutAccountButton, SIGNAL(clicked()), this, SLOT(logoutButtonClicked()));
+    connect(_myAccountPage, SIGNAL(balanceChanged(int)), this, SLOT(changeBalance(int)));
 }
 
 CentralWidget::~CentralWidget(){}
@@ -116,7 +117,7 @@ void CentralWidget::logoutButtonClicked(){
     _currentUser = {};
     _loginAccountButton->setText("Login");
     _logoutAccountButton->setEnabled(false);
-    this->update();
+    this->repaint();    // instead of update()
 }
 
 void CentralWidget::createAccountButtonClicked(){

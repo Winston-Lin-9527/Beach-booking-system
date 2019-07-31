@@ -211,6 +211,7 @@ bool AccSettingPage::validatePage(){
             return true;        // only return true when both conditons are met, otherwise don't allow to proceed
         else{
             QMessageBox::about(this, "Warning", "Passwords don't match!");
+            _usernameLineEdit->clear();
             _passwordConfirmLineEdit->clear();
             _passwordLineEdit->clear();
 

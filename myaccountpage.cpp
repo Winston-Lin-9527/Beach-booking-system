@@ -4,6 +4,8 @@
 #include <QStringList>
 #include <QDebug>
 #include <QLabel>
+#include <QSpinBox>
+#include <QPushButton>
 
 #include "myaccountpage.h"
 #include "databasehandler.h"
@@ -56,20 +58,40 @@ MyAccountPage::MyAccountPage()
     font.setPointSize(25);
     _activeBookingLabel->setFont(font);
 
-    this->_balanceLabel = new QLabel("");
+    this->_balanceLabel = new QLabel;
+    this->_topupButton = new QPushButton("Confirm");
+    this->_topupLabel = new QLabel("Top up: ");
+    this->_topupSpinBox = new QSpinBox;
+    _topupSpinBox->setRange(0, 999);
+    _topupSpinBox->setPrefix("$ ");
+
+    QHBoxLayout *balanceHLayout = new QHBoxLayout;
+    balanceHLayout->addWidget(_balanceLabel);
+    balanceHLayout->addWidget(_topupLabel);
+    balanceHLayout->addWidget(_topupSpinBox);
+    balanceHLayout->addWidget(_topupButton);
+
+    balanceHLayout->setStretch(0, 5);
+    balanceHLayout->setStretch(1, 1);
+    balanceHLayout->setStretch(2, 3);
+    balanceHLayout->setStretch(3, 1);
 
     this->_mLayout = new QGridLayout;
     _mLayout->addWidget(_activeBookingLabel, 0, 0);
-    _mLayout->addWidget(_balanceLabel, 1, 0);
-    _mLayout->addWidget(_bookingRecordTable, 2, 0);
+    _mLayout->addLayout(balanceHLayout, 1, 0);
+    _mLayout->addWidget(_balanceLabel, 2, 0);
+    _mLayout->addWidget(_bookingRecordTable, 3, 0);
 
     this->setLayout(_mLayout);
     this->setFixedSize(QSize(560, 400));
+
+    connect(_topupButton, SIGNAL(clicked()), this, SLOT(topupButtonClicked()));
 }
 
 void MyAccountPage::openPage(QString accountID, int balance){
     QString balanceText("Your balance: $");
     balanceText += QString::number(balance);
+    _balance = balance;
 
     _balanceLabel->setText(balanceText);
 
@@ -106,4 +128,10 @@ void MyAccountPage::openPage(QString accountID, int balance){
         this->_bookingRecordTable->setItem(i, 4, durationItem);
     }
     this->open();
+}
+
+void MyAccountPage::topupButtonClicked(){
+    this->_balanceLabel->setText("Your balance: $" + QString::number(this->_topupSpinBox->value() + _balance));
+    _balance = this->_topupSpinBox->value() + _balance;
+    emit balanceChanged(this->_topupSpinBox->value() + _balance);
 }
