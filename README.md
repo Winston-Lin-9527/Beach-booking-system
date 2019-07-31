@@ -3,7 +3,7 @@ Welcome to the Beach-booking-system!
 The beach equipment booking system is an application based on QT framework. It is designed to run on computers at the equipment booking centre, provide simple self services.
 
 latest compiled version can be found here(MacOS):   
-"link"
+https://github.com/DragonHole/Beach-booking-system/releases
 
 # Features 
 * Register new account. 
